@@ -1,0 +1,44 @@
+<head>
+  <title>sudoku</title>
+</head>
+
+<body>
+  <h1 id="title">SUDOKU</h1>
+  {{> map}}
+  {{> rank}}
+</body>
+
+<template name="map">
+  <div id="map">
+  {{#each grids}}
+    {{>grid}}
+  {{/each}}
+  </div>
+</template>
+
+<template name="grid">
+  <input class='grid {{#if is_error}}error{{/if}}' data-col='{{col}}' data-row='{{row}}' data-block='{{block}}' {{disabled}} value='{{number}}' style="color:{{color}}"maxlength="1" />
+</template>
+
+<template name="rank">
+  <table>
+    <thead>
+      <tr>
+        <td>User</td>
+        <td>Score</td>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each users}}
+        {{> user}}
+      {{/each}}
+    </tbody>
+  </table>
+</template>
+
+<template name="user">
+  <tr style="color:{{color}}">
+    <td>{{name}}</td>
+    <td>{{score}}</td>
+  </tr>
+</template>

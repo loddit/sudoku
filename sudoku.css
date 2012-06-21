@@ -1,0 +1,55 @@
+/* CSS declarations go here */
+input.grid { 
+  width: 34px;
+  height: 32px;
+  font-size: 24px;
+  text-align: center;
+  display: block;
+  border: 1px solid #666;
+  position: absolute;
+}
+
+input.grid:disabled {color: black}
+
+h1 {text-align:center;}
+
+#map {
+  border: 1px solid #666;
+  margin: 40px auto;
+  width: 324px;
+  height: 324px;
+}
+
+.grid[data-row="0"] {margin-top: 0px;}
+.grid[data-row="1"] {margin-top: 36px;}
+.grid[data-row="2"] {margin-top: 72px;}
+.grid[data-row="3"] {margin-top: 108px;}
+.grid[data-row="4"] {margin-top: 144px;}
+.grid[data-row="5"] {margin-top: 180px;}
+.grid[data-row="6"] {margin-top: 216px;}
+.grid[data-row="7"] {margin-top: 252px;}
+.grid[data-row="8"] {margin-top: 288px;}
+
+
+.grid[data-col="0"] {margin-left: 0px;}
+.grid[data-col="1"] {margin-left: 36px;}
+.grid[data-col="2"] {margin-left: 72px;}
+.grid[data-col="3"] {margin-left: 108px;}
+.grid[data-col="4"] {margin-left: 144px;}
+.grid[data-col="5"] {margin-left: 180px;}
+.grid[data-col="6"] {margin-left: 216px;}
+.grid[data-col="7"] {margin-left: 252px;}
+.grid[data-col="8"] {margin-left: 288px;}
+
+
+.grid[data-block="0"] {background-color: #eee}
+.grid[data-block="1"] {background-color: #fcfcfc}
+.grid[data-block="2"] {background-color: #eee}
+.grid[data-block="3"] {background-color: #fcfcfc}
+.grid[data-block="4"] {background-color: #eee}
+.grid[data-block="5"] {background-color: #fcfcfc}
+.grid[data-block="6"] {background-color: #eee}
+.grid[data-block="7"] {background-color: #fcfcfc}
+.grid[data-block="8"] {background-color: #eee}
+
+#map input.grid.error {background-color: #fcc}
