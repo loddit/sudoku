@@ -122,4 +122,4 @@ input#join {
 .grid[data-block="7"] {background-color: #fcfcfc}
 .grid[data-block="8"] {background-color: #eee}
 
-#map input.grid.error {background-color: #fcc}
+#sudoku input.grid.error {background-color: #fcc}

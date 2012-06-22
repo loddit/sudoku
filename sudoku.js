@@ -42,7 +42,7 @@ if (Meteor.is_client) {
       }else{
         var error = false
       }
-      if (number == ''){ var player_hash = ''}else{ var player_hash = current_player_hash}
+      if (number == ''){ var player_hash = 'system'}else{ var player_hash = current_player_hash}
       Grids.update(
         {row: parseInt(grid.attr('data-row')),col: parseInt(grid.attr('data-col'))},
         {$set: { number: number, error: error, color: current_player.color, player: player_hash}},
@@ -54,13 +54,20 @@ if (Meteor.is_client) {
       Players.update(current_player_hash, {$set: {score: score}})
     },
     'click': function(event){
+      var grid = $(event.target);
       if ( typeof(current_player) == 'undefined'){
         alert("Join game first :)");
-        event.target.blur();
+        grid.blur();
         event.preventDefault();
+      }else{
+        var grid_player = Grids.findOne({row: parseInt(grid.attr('data-row')),col: parseInt(grid.attr('data-col'))}).player 
+        if(grid_player != current_player_hash && grid_player != 'system'){
+          alert("This grid is holded by other player :(");
+          grid.blur();
+          event.preventDefault();
+        }
       }
     }
-
   }
 
   Template.rank.players = function(){
