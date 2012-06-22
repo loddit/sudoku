@@ -18,13 +18,13 @@ form {
 }
 
 form p{
-  color: #aaa;
+  color: gray;
   text-align: center;
-  font-size: 12px;
+  font-size: 13px;
   font-family: 'Quantico', sans-serif;
 }
 
-h1 {
+h1#logo {
   text-align: center;
   font-family: 'Quantico', sans-serif;
   font-size: 40px;
@@ -54,7 +54,7 @@ input#name{
   padding: 3px;
 }
 
-input#join {
+input#join ,button#restart {
   display: inline-block;
   padding: 3px 20px 3px;
   color: #fff;
@@ -69,7 +69,7 @@ input#join {
   text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
   background-image: -webkit-linear-gradient(#ff6666, #dd2222);
   background-image: -moz-linear-gradient(#ff6666, #dd2222);
-  cursor: pointer
+  cursor: pointer;
 }
 
 #dashboard {
@@ -125,4 +125,42 @@ input#join {
 .grid[data-block="7"] {background-color: #fcfcfc}
 .grid[data-block="8"] {background-color: #eee}
 
+.grid {
+cursor: pointer;
+}
+.grid:disabled {cursor: auto;}
+.grid:hover {
+  -webkit-box-shadow: inset 0 0px 64px rgba(128,128,128, 0.2);
+     -moz-box-shadow: inset 0 0px 64px rgba(128,128,128, 0.2);
+}
+
 #sudoku input.grid.error {background-color: #fcc}
+
+#congratulation {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  text-align: center;
+  background-color: #933;
+  left: 0;
+  top: 200px;
+}
+
+#congratulation h2 {
+  font-size: 36px;
+  font-family: 'Vollkorn',serif;
+  font-style: italic;
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+@-webkit-keyframes blink {  
+  from { background-color: #f93; color: white}
+  to {background-color: inherit; color: inherit}
+}
+
+.grid {
+  -webkit-animation-name: blink;  
+  -webkit-animation-iteration-count: 1;  
+  -webkit-animation-duration: 0.4s; 
+}

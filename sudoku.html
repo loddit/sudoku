@@ -1,10 +1,11 @@
 <head>
   <title>sudoku</title>
   <link href='http://fonts.googleapis.com/css?family=Quantico:700' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Vollkorn:700italic' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
-  <h1 id="title">SUDOKU</h1>
+  <h1 id="logo">SUDOKU</h1>
   <div id="dashboard">
     {{> sidebar}}
     {{> sudoku}}
@@ -21,11 +22,11 @@
 <template name="form">
   <form>
     {{#if has_current_player }}
+      <p>Game Started !</p>
+    {{else}}
       <input id="name" name="name" value="" placeholder="Your Name" />
       <br/>   
       <input type="submit" id="join" value="Join Game !">
-    {{else}}
-      <p>Game Started !</p>
     {{/if}}
   </form>
 </template>
@@ -68,4 +69,11 @@
     </td>
     <td>{{score}}</td>
   </tr>
+</template>
+
+<template name="congratulation">
+  <div id="congratulation">
+    <h2>Congratulation!</h2>
+    <button id="restart">Restart</button>
+  </div>
 </template>
