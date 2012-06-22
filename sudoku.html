@@ -1,15 +1,33 @@
 <head>
   <title>sudoku</title>
+  <link href='http://fonts.googleapis.com/css?family=Quantico:700' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
   <h1 id="title">SUDOKU</h1>
-  {{> map}}
-  {{> rank}}
+  <div id="dashboard">
+    {{> sidebar}}
+    {{> sudoku}}
+  </div>
 </body>
 
-<template name="map">
-  <div id="map">
+<template name="sidebar">
+  <div id="sidebar">
+    {{> rank}}
+    {{> form}}
+  </div>
+</template>
+
+<template name="form">
+  <form>
+    <input id="name" name="name" value="" placeholder="Your Name" />
+    <br/>   
+    <input type="submit" id="join" value="Join Game !">
+  </form>
+</template>
+
+<template name="sudoku">
+  <div id="sudoku">
   {{#each grids}}
     {{>grid}}
   {{/each}}
@@ -21,24 +39,29 @@
 </template>
 
 <template name="rank">
-  <table>
+  <table id="rank">
     <thead>
       <tr>
-        <td>User</td>
+        <td>Player</td>
         <td>Score</td>
       </tr>
     </thead>
     <tbody>
-      {{#each users}}
-        {{> user}}
+      {{#each players}}
+        {{> player}}
       {{/each}}
     </tbody>
   </table>
 </template>
 
-<template name="user">
+<template name="player">
   <tr style="color:{{color}}">
-    <td>{{name}}</td>
+    <td>
+      {{#if is_current}}
+        <span class="current"> > </span>
+      {{/if}}
+      {{name}}
+    </td>
     <td>{{score}}</td>
   </tr>
 </template>
