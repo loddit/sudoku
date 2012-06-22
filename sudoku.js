@@ -2,15 +2,48 @@ Grids = new Meteor.Collection("grids");
 Players = new Meteor.Collection("players");
 var numbers = ['','1','2','3','4','5','6','7','8','9']
 
+  function GameInit(){
+    Grids.remove({});
+    Players.remove({});
+    var game = [
+            [2, ,5, , ,7, , ,6,],
+            [4, , ,9,6, , ,2, ,],
+            [ , , , ,8, , ,4,5,],
+            [9,8, , ,7,4, , , ,],
+            [5,7, ,8, ,2, ,6,9,],
+            [ , , ,6,3, , ,5,7,],
+            [7,5, , ,2, , , , ,],
+            [ ,6, , ,5,1, , ,2,],
+            [3, , ,4, , ,5, ,8,]
+          ];
+
+    _.each(game,function(item,row){
+      for(var col = 0; col < item.length; col++){
+        var number = item[col]
+        var disabled="disabled"
+        if(number == undefined ){
+          number = ''
+          disabled= ''
+        }
+        Grids.insert({number: number, disabled: disabled ,row: row, col: col,block: (Math.floor(col/3) + 3*Math.floor(row/3)),player: 'system',error: false});
+      };
+    });
+  }
+ 
 if (Meteor.is_client) {
   
   Template.form.events = {
     'submit': function(event){
       event.preventDefault();
       var random_color = "#" + Math.floor(Math.random()*10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10)
-      current_player_hash = Players.insert({name: $('#name').val(),color: random_color,score: 0},function(){$(event.target).html("Game Started !")});
+      current_player_hash = Players.insert({name: $('#name').val(),color: random_color,score: 0});
       current_player = Players.findOne(current_player_hash);
+      $(event.target).replaceWith(Meteor.ui.render(Template.form))
     }
+  }
+
+  Template.form.has_current_player = function(){
+    return typeof(current_player_hash) == 'undefined'
   }
 
   Template.sudoku.grids = function(){
@@ -76,31 +109,7 @@ if (Meteor.is_client) {
 }
 
 if (Meteor.is_server) {
-  Meteor.startup(function () {
-    Grids.remove({});
-    Players.remove({});
-    var game = [
-            [2, ,5, , ,7, , ,6,],
-            [4, , ,9,6, , ,2, ,],
-            [ , , , ,8, , ,4,5,],
-            [9,8, , ,7,4, , , ,],
-            [5,7, ,8, ,2, ,6,9,],
-            [ , , ,6,3, , ,5,7,],
-            [7,5, , ,2, , , , ,],
-            [ ,6, , ,5,1, , ,2,],
-            [3, , ,4, , ,5, ,8,]
-          ];
-
-    _.each(game,function(item,row){
-      for(var col = 0; col < item.length; col++){
-        var number = item[col]
-        var disabled="disabled"
-        if(number == undefined ){
-          number = ''
-          disabled= ''
-        }
-        Grids.insert({number: number, disabled: disabled ,row: row, col: col,block: (Math.floor(col/3) + 3*Math.floor(row/3)),player: 'system',error: false});
-      };
-    });
+ Meteor.startup(function () {
+    GameInit()
   });
 }

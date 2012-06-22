@@ -14,11 +14,14 @@ input.grid {
 
 input.grid:disabled {color: black}
 form {
+  padding: 10px 0;
+}
+
+form p{
   color: #aaa;
+  text-align: center;
   font-size: 12px;
   font-family: 'Quantico', sans-serif;
-  text-align: center;
-  padding: 10px 0;
 }
 
 h1 {

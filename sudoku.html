@@ -20,9 +20,13 @@
 
 <template name="form">
   <form>
-    <input id="name" name="name" value="" placeholder="Your Name" />
-    <br/>   
-    <input type="submit" id="join" value="Join Game !">
+    {{#if has_current_player }}
+      <input id="name" name="name" value="" placeholder="Your Name" />
+      <br/>   
+      <input type="submit" id="join" value="Join Game !">
+    {{else}}
+      <p>Game Started !</p>
+    {{/if}}
   </form>
 </template>
 
