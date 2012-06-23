@@ -151,6 +151,7 @@ if (Meteor.is_client) {
         alert("Join game first :)");
         grid.blur();
         event.preventDefault();
+        $('#name').focus();
       }else{
         var grid_player = Grids.findOne({row: parseInt(grid.attr('data-row')),col: parseInt(grid.attr('data-col'))}).player 
         if(grid_player != current_player_hash && grid_player != 'system'){

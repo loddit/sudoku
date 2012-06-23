@@ -1,18 +1,6 @@
 /* CSS declarations go here */
 body {background-image: url('/bright_squares.png')}
 
-input.grid { 
-  width: 34px;
-  height: 32px;
-  font-size: 24px;
-  font-family: 'Quantico', sans-serif;
-  text-align: center;
-  display: block;
-  border: 1px solid #666;
-  position: absolute;
-}
-
-input.grid:disabled {color: black}
 form {
   padding: 10px 0;
 }
@@ -125,13 +113,39 @@ input#join ,button#restart {
 .grid[data-block="7"] {background-color: #fcfcfc}
 .grid[data-block="8"] {background-color: #eee}
 
-.grid {
-cursor: pointer;
+@-webkit-keyframes blink {  
+  from { background-color: #06c; color: white}
+  to {background-color: inherit; color: inherit}
 }
-.grid:disabled {cursor: auto;}
-.grid:hover {
+
+input.grid:hover {
   -webkit-box-shadow: inset 0 0px 64px rgba(128,128,128, 0.2);
      -moz-box-shadow: inset 0 0px 64px rgba(128,128,128, 0.2);
+}
+
+input.grid { 
+  width: 34px;
+  height: 34px;
+  font-size: 20px;
+  padding: 0px;
+  line-height: 20px;
+  font-family: 'Quantico', sans-serif;
+  text-align: center;
+  display: block;
+  border: 1px solid #666;
+  position: absolute;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -webkit-animation-name: blink;  
+  -webkit-animation-iteration-count: 1;  
+  -webkit-animation-duration: 0.4s; 
+  border-radius: 0;
+  box-sizing: content-box;
+}
+
+input.grid:disabled {
+  color: black;
+  cursor: auto;
 }
 
 #sudoku input.grid.error {background-color: #fcc}
@@ -154,13 +168,3 @@ cursor: pointer;
   color: #ffcc00;
 }
 
-@-webkit-keyframes blink {  
-  from { background-color: #f93; color: white}
-  to {background-color: inherit; color: inherit}
-}
-
-.grid {
-  -webkit-animation-name: blink;  
-  -webkit-animation-iteration-count: 1;  
-  -webkit-animation-duration: 0.4s; 
-}
