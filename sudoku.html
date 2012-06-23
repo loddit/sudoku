@@ -9,6 +9,7 @@
   <div id="dashboard">
     {{> sidebar}}
     {{> sudoku}}
+    {{> chatroom}}
   </div>
 </body>
 
@@ -20,7 +21,7 @@
 </template>
 
 <template name="form">
-  <form>
+  <form id="panel">
     {{#if has_current_player }}
       <p>Game Started !</p>
     {{else}}
@@ -76,4 +77,29 @@
     <h2>Congratulation!</h2>
     <button id="restart">Restart</button>
   </div>
+</template>
+
+<template name="chatroom">
+  <div id="chatroom">
+    <h4>Chatroom:</h4>
+    {{> say}}
+    {{#each messages}}
+      {{> message}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="message">
+  <p class="message" style="color:{{player.color}}" >
+    {{player.name}}: {{content}}
+  </p>
+</template>
+
+<template name="say">
+  <form id="say">
+    {{#if has_current_player }}
+      <input id="content" name="content" value="" placeholder="Send message"/>
+    {{else}}
+    {{/if}}
+  </form>
 </template>
