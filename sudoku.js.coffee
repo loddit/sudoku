@@ -114,11 +114,15 @@ if Meteor.is_client
         event.preventDefault()
         $("#name").focus()
       else
+        grid_error = Grids.findOne(
+          row: parseInt(grid.attr("data-row"))
+          col: parseInt(grid.attr("data-col"))
+        ).error
         grid_player = Grids.findOne(
           row: parseInt(grid.attr("data-row"))
           col: parseInt(grid.attr("data-col"))
         ).player
-        if grid_player isnt current_player_hash and grid_player isnt "system" and !@is_error
+        if grid_player isnt current_player_hash and grid_player isnt "system" and !grid_error
           alert "This grid is holded by other player :("
           grid.blur()
           event.preventDefault()
