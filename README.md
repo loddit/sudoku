@@ -14,6 +14,7 @@ Powerd and hosted by [Meteor](http://www.meteor.com). [see more](https://github.
 
 Todo list
 
-1. Use Games model for puzzle storage
-2. Use coffeescript
+1. Use Games model for puzzle storage[Doing]
+2. Use coffeescript[Done]
 3. Use Less
+4. Design Rule (Bouns and Penalty)
