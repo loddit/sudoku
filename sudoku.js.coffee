@@ -144,13 +144,12 @@ if Meteor.is_client
   Template.say.events = submit: (event) ->
     event.preventDefault()
     say = $(event.target)
-    Messages.insert
-      content: say.find("input#content").val()
-      player: current_player
-      time: new Date()
-
-    $(event.target).replaceWith Meteor.ui.render(Template.say)
-
+    if current_player and $.trim(say.find("input#content").val()) != ''
+      Messages.insert
+        content: say.find("input#content").val()
+        player: current_player
+        time: new Date()
+      $(event.target).replaceWith Meteor.ui.render(Template.say)
 
 if Meteor.is_server
   Meteor.startup ->

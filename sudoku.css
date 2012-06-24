@@ -85,6 +85,7 @@ input#name, input#content {
 
 #sudoku {
   border: 1px solid #666;
+  background-image: url("/loading.gif");
   width: 324px;
   height: 324px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
