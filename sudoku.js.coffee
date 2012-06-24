@@ -84,7 +84,7 @@ if Meteor.is_client
     else
       false
 
-  Template.join.player_name = -> current_player_name
+  Template.join.player_name = -> if current_player_name? then current_player_name else ''
 
   Template.sudoku.grids = -> Grids.find {}
 

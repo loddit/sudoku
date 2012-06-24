@@ -20,4 +20,4 @@ Todo list
 2. Use coffeescript[Done]
 3. Use Less
 4. Design Rule (Bouns and Penalty)
-5. Use Cookie to remember player status
+5. Use Cookie to remember player status[Done]
