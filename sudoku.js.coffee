@@ -142,8 +142,9 @@ if Meteor.is_client
         $set:
           score: score
 
-    click: (event) ->
+    click: (event) =>
       grid = $(event.target)
+      @current_player ?= Players.findOne(@current_player_hash)
       if typeof (current_player) is "undefined"
         alert "Join game first :)"
         grid.blur()
@@ -177,7 +178,7 @@ if Meteor.is_client
       sort:
         time: -1
 
-  Template.say.events = submit: (event) ->
+  Template.say.events = submit: (event) =>
     event.preventDefault()
     say = $(event.target)
     @current_player ?= Players.findOne(@current_player_hash)
