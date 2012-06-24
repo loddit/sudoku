@@ -49,7 +49,7 @@ input#name, input#content {
 #name {width: 112px;}
 #content {width: 480px;}
   
-input#join ,button#restart {
+#join input[type="submit"] ,button#restart {
   display: inline-block;
   padding: 3px 0 3px;
   color: #fff;
@@ -71,7 +71,7 @@ input#join ,button#restart {
 
 #dashboard {
   width: 480px;
-  margin: 40px auto;
+  margin: 0px auto;
 }
 
 #rank {
@@ -130,9 +130,19 @@ input#join ,button#restart {
   from { background-color: #06c; color: white}
   to {background-color: inherit; color: inherit}
 }
+
+@-webkit-keyframes fadein {  
+  from { opacity: 0}
+  to { opacity: 1}
+}
+@-moz-keyframes fadein {  
+  from { opacity: 0}
+  to { opacity: 1}
+}
+
 input.grid:hover {
-  -webkit-box-shadow: inset 0 0px 64px rgba(128,128,128, 0.2);
-     -moz-box-shadow: inset 0 0px 64px rgba(128,128,128, 0.2);
+  -webkit-box-shadow: inset 0 0px 64px rgba(64,64,64, 0.1);
+     -moz-box-shadow: inset 0 0px 64px rgba(64,64,64, 0.1);
 }
 
 input.grid { 
@@ -191,7 +201,17 @@ input.grid:disabled {
 
 p.message {
   margin: 2px 0;
+  padding: 2px;
   font-size: 11px;
+  -webkit-appearance: none;
+  -webkit-animation-name: fadein;  
+  -webkit-animation-iteration-count: 1;  
+  -webkit-animation-duration: 0.4s; 
+  -moz-appearance: none;
+  -moz-animation-name: fadein;  
+  -moz-animation-iteration-count: 1;  
+  -moz-animation-duration: 0.4s; 
+
 }
 
 #chatroom h4 {

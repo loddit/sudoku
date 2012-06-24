@@ -16,18 +16,18 @@
 <template name="sidebar">
   <div id="sidebar">
     {{> rank}}
-    {{> form}}
+    {{> join}}
   </div>
 </template>
 
-<template name="form">
-  <form id="panel">
+<template name="join">
+  <form id="join">
     {{#if has_current_player }}
       <p>Game Started !</p>
     {{else}}
       <input id="name" name="name" value="" placeholder="Your Name" />
       <br/>   
-      <input type="submit" id="join" value="Join Game !">
+      <input type="submit" value="Join Game !">
     {{/if}}
   </form>
 </template>
@@ -63,7 +63,7 @@
 <template name="player">
   <tr style="color:{{color}}">
     <td>
-      {{#if is_current}}
+      {{#if is_current_player}}
         <span class="current"> > </span>
       {{/if}}
       {{name}}
