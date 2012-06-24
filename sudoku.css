@@ -112,15 +112,15 @@ input#name, input#content {
 .grid[data-col="8"] {margin-left: 288px;}
 
 
-.grid[data-block="0"] {background-color: #eee}
+.grid[data-block="0"] {background-color: #ececec}
 .grid[data-block="1"] {background-color: #fcfcfc}
-.grid[data-block="2"] {background-color: #eee}
+.grid[data-block="2"] {background-color: #ececec}
 .grid[data-block="3"] {background-color: #fcfcfc}
-.grid[data-block="4"] {background-color: #eee}
+.grid[data-block="4"] {background-color: #ececec}
 .grid[data-block="5"] {background-color: #fcfcfc}
-.grid[data-block="6"] {background-color: #eee}
+.grid[data-block="6"] {background-color: #ececec}
 .grid[data-block="7"] {background-color: #fcfcfc}
-.grid[data-block="8"] {background-color: #eee}
+.grid[data-block="8"] {background-color: #ececec}
 
 @-webkit-keyframes blink {  
   from { background-color: #06c; color: white}
@@ -167,6 +167,7 @@ input.grid {
   -moz-animation-duration: 0.4s; 
   border-radius: 0;
   box-sizing: content-box;
+  opacity: 1;
 }
 
 input.grid:disabled {
