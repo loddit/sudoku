@@ -5,8 +5,8 @@
 </head>
 
 <body>
-  <h1 id="logo">SUDOKU</h1>
   <div id="dashboard">
+    <h1 id="logo">SUDOKU</h1>
     {{> sidebar}}
     {{> sudoku}}
     {{> chatroom}}
@@ -21,26 +21,27 @@
 </template>
 
 <template name="join">
-  <form id="join">
-    {{#if has_current_player }}
-      <div id="tips">
-        <p><b>Game Started !</b></p>
-        <p>
-          Be careful to fill in each grid to ensure your answer is correct.
-        </p>
-        <p>
-          You can not change grid that other player filled, unless it is obviously wrong.
-        </p>
-        <p>
-          Playing together for fun
-        </p>
-      </div >
-    {{else}}
+  {{#if has_current_player }}
+    <div id="tips">
+      <p><b>Game Started !</b></p>
+      <p>
+        Be careful to fill each grid to ensure your answer is correct.
+      </p>
+      <p>
+        You can not change grid that other player filled, unless it is obviously wrong.
+      </p>
+      <p>
+        Playing together for fun
+      </p>
+    </div >
+    {{>restart}}
+  {{else}}
+    <form id="join">
       <input id="name" name="name" value="{{player_name}}" placeholder="Your Name" />
       <br/>   
       <input type="submit" value="Join Game !">
-    {{/if}}
-  </form>
+    </form>
+  {{/if}}
 </template>
 
 <template name="sudoku">
@@ -86,7 +87,6 @@
 <template name="congratulation">
   <div id="congratulation">
     <h2>Congratulation!</h2>
-    <button id="restart">Restart</button>
   </div>
 </template>
 
@@ -112,5 +112,11 @@
       <input id="content" name="content" value="" placeholder="Send message"/>
     {{else}}
     {{/if}}
+  </form>
+</template>
+
+<template name="restart">
+  <form id="restart">
+    <input type="submit" {{disabled}} value="Restart require {{counter}}/{{condition}}">
   </form>
 </template>

@@ -8,42 +8,46 @@ ImportPuzzle = ->
   _.each puzzles,(puzzle) ->
     Games.insert {puzzle: puzzle}
 
-GameInit = ->
-  Grids.remove {}
-  Players.remove {}
-  Messages.remove {}
-  if Games.find({}).count() == 0
-    ImportPuzzle()
-  games = Games.find({}).fetch()
-  game = games[Math.floor(Math.random() * games.length)]
-  _.each game.puzzle, (item, row) ->
-    col = 0
-
-    while col < item.length
-      number = item[col]
-      disabled = "disabled"
-      if !number?
-        number = ""
-        disabled = ""
-      Grids.insert
-        number: number
-        disabled: disabled
-        row: row
-        col: col
-        block: (Math.floor(col / 3) + 3 * Math.floor(row / 3))
-        player: "system"
-        error: false
-        color: "black"
-      , ->
-      col++
+Meteor.methods(
+  game_init: =>
+    Grids.remove {}
+    Players.remove {}
+    Messages.remove {}
+    if Games.find({}).count() == 0
+      ImportPuzzle()
+    games = Games.find({}).fetch()
+    game = games[Math.floor(Math.random() * games.length)]
+    _.each game.puzzle, (item, row) ->
+      col = 0
+      while col < item.length
+        number = item[col]
+        disabled = "disabled"
+        if !number?
+          number = ""
+          disabled = ""
+        Grids.insert
+          number: number
+          disabled: disabled
+          row: row
+          col: col
+          block: (Math.floor(col / 3) + 3 * Math.floor(row / 3))
+          player: "system"
+          error: false
+          color: "black"
+        , ->
+        col++
+    @game = game
+  ,
+  get_current_game_hash: =>
+    @game?._id
+)
 
 if Meteor.is_client
-  
   (($) -> #jQuery cookie
     $.cookie = (key, value, options) ->
-      if arguments.length > 1 and (not /Object/.test(Object::toString.call(value)) or value is null or value is `undefined`)
+      if arguments.length > 1 and (not /Object/.test(Object::toString.call(value)) or value is null or value is undefined)
         options = $.extend({}, options)
-        options.expires = -1  if value is null or value is `undefined`
+        options.expires = -1  if value is null or value is undefined
         if typeof options.expires is "number"
           days = options.expires
           t = options.expires = new Date()
@@ -61,29 +65,33 @@ if Meteor.is_client
       null
   ) jQuery
 
-  $ =>
+  Meteor.startup =>
     @current_player_hash = $.cookie('player_hash')
     @current_player_name = $.cookie('player_name')
+    Meteor.call 'get_current_game_hash',(error,result) =>
+      @current_game_hash = result
+      Games.update current_game_hash, {$set:{restart_required_players: []}}
 
-  Template.join.events = submit: (event) =>
-    event.preventDefault()
-    name = $.trim($("#name").val())
-    if name == ''
-      alert "Player name can not be empty!"
-    else
-      random_color = "##{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}"
-      @current_player_hash = Players.insert(
-        name: name
-        color: random_color
-        score: 0
-      , ->
-        @current_player = Players.findOne(@current_player_hash)
-        @current_player_name = name
-        $.cookie('player_hash',@current_player_hash)
-        $.cookie('player_name', name)
-      )
-      $(event.target).replaceWith Meteor.ui.render(Template.join)
-      $("#say").replaceWith Meteor.ui.render(Template.say)
+  Template.join.events =
+    "submit #join": (event) =>
+      event.preventDefault()
+      name = $.trim($("#name").val())
+      if name == ''
+        alert "Player name can not be empty!"
+      else
+        random_color = "##{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}"
+        @current_player_hash = Players.insert(
+          name: name
+          color: random_color
+          score: 0
+        , ->
+          @current_player = Players.findOne(@current_player_hash)
+          @current_player_name = name
+          $.cookie('player_hash',@current_player_hash)
+          $.cookie('player_name', name)
+        )
+        $(event.target).replaceWith Meteor.ui.render(Template.join)
+        $("#say").replaceWith Meteor.ui.render(Template.say)
 
   Template.say.has_current_player = Template.join.has_current_player = ->
     if current_player_hash? and Players.findOne(current_player_hash)?
@@ -174,11 +182,32 @@ if Meteor.is_client
   Template.rank.players = ->
     Players.find {}
 
-  Template.congratulation.events = "click #restart": (event) ->
-    GameInit()
-    current_player_hash = current_player = `undefined`
-    $(Template.join).replaceWith Meteor.ui.render(Template.join)
-    $(event.target).parent().remove()
+  Template.restart.condition = -> Math.floor(Players.find({}).count()/2) + 1
+
+  Template.restart.counter = ->
+    current_game = Games.findOne current_game_hash
+    current_game.restart_required_players.length or 0
+
+  Template.restart.disabled = ->
+    current_game = Games.findOne current_game_hash
+    if current_player_hash in current_game.restart_required_players
+      "disabled"
+    else
+      ''
+
+  Template.restart.events =
+    "submit #restart": (event) =>
+      event.preventDefault()
+      current_game = Games.findOne current_game_hash
+      restart_required_players = current_game.restart_required_players.concat(@current_player_hash)
+      Games.update current_game_hash, {$set:{restart_required_players: restart_required_players}}
+      if Template.restart.counter() >= Template.restart.condition()
+        Meteor.call('game_init')
+        current_player_hash = current_player = undefined
+        $(Template.join).replaceWith Meteor.ui.render(Template.join)
+        Meteor.call 'get_current_game_hash',(error,result) =>
+          @current_game_hash = result
+          Games.update current_game_hash, {$set:{restart_required_players: []}}
 
   Template.chatroom.messages = ->
     Messages.find {},
@@ -198,4 +227,5 @@ if Meteor.is_client
 
 if Meteor.is_server
   Meteor.startup ->
-    GameInit()
+    Meteor.call('game_init')
+    
