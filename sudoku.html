@@ -23,7 +23,18 @@
 <template name="join">
   <form id="join">
     {{#if has_current_player }}
-      <p>Game Started !</p>
+      <div id="tips">
+        <p><b>Game Started !</b></p>
+        <p>
+          Be careful to fill in each grid to ensure your answer is correct.
+        </p>
+        <p>
+          You can not change grid that other player filled, unless it is obviously wrong.
+        </p>
+        <p>
+          Playing together for fun
+        </p>
+      </div >
     {{else}}
       <input id="name" name="name" value="" placeholder="Your Name" />
       <br/>   

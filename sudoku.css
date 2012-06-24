@@ -1,18 +1,17 @@
 /* CSS declarations go here */
 body {
   background-image: url('/bright_squares.png');
-  font-family: 'Quantico', sans-serif;
 }
 
-form {
+#join {
   padding: 10px 0;
 }
 
-form p{
-  color: gray;
-  text-align: center;
-  font-size: 13px;
-  font-family: 'Quantico', sans-serif;
+#tips { width: 124px;}
+#tips p{
+  font-size: 11px;
+  color: #666;
+  margin: 6px 0 2px;
 }
 
 h1#logo {
@@ -204,6 +203,7 @@ p.message {
   margin: 2px 0;
   padding: 2px;
   font-size: 11px;
+  font-family: 'Quantico', sans-serif;
   -webkit-appearance: none;
   -webkit-animation-name: fadein;  
   -webkit-animation-iteration-count: 1;  
