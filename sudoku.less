@@ -1,4 +1,8 @@
-/* CSS declarations go here */
+/* LESS declarations go here */
+@grid_length: 36px;
+@odd_block_color: #e9e9e9;
+@even_block_color: #fcfcfc;
+
 body {
   background-image: url('/bright_squares.png');
 }
@@ -7,11 +11,13 @@ body {
   padding: 10px 0;
 }
 
-#tips { width: 124px;}
-#tips p{
-  font-size: 11px;
-  color: #666;
-  margin: 6px 0 2px;
+#tips { 
+  width: 124px;
+  p {
+    font-size: 11px;
+    color: #666;
+    margin: 6px 0 2px;
+  }
 }
 
 h1#logo {
@@ -45,6 +51,7 @@ input#name, input#content {
           transition: border linear 0.2s, box-shadow linear 0.2s;
   padding: 3px;
 }
+
 #name {width: 112px;}
 #content {width: 480px;}
   
@@ -56,11 +63,14 @@ input#name, input#content {
   font-weight: bold;
   border: 1px solid #aa0000;
   text-decoration: none;
-  -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  -moz-border-radius: 5px;
+  border-radius: 5px;
   -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
   text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+  background-color: #dd2222;
   background-image: -webkit-linear-gradient(#ff6666, #dd2222);
   background-image: -moz-linear-gradient(#ff6666, #dd2222);
   cursor: pointer;
@@ -74,53 +84,53 @@ input#name, input#content {
 }
 
 #rank {
-  font-family: 'Quantico', sans-serif;
-}
+ font-family: 'Quantico', sans-serif;
 
-#rank tr {border-bottom: 1px solid gray}
-#rank td:first-child {width: 70px}
-#rank td:last-child {width: 40px;text-align: right}
-#rank .current {position: absolute;margin-left: -15px}
+ tr {border-bottom: 1px solid gray}
+ td:first-child {width: 70px}
+ td:last-child {width: 40px;text-align: right}
+ .current {position: absolute;margin-left: -15px}
+}
 
 #sudoku {
   border: 1px solid #666;
   background-image: url("/loading.gif");
-  width: 324px;
-  height: 324px;
+  width: @grid_length * 9;
+  height: @grid_length * 9;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
 }
 
-.grid[data-row="0"] {margin-top: 0px;}
-.grid[data-row="1"] {margin-top: 36px;}
-.grid[data-row="2"] {margin-top: 72px;}
-.grid[data-row="3"] {margin-top: 108px;}
-.grid[data-row="4"] {margin-top: 144px;}
-.grid[data-row="5"] {margin-top: 180px;}
-.grid[data-row="6"] {margin-top: 216px;}
-.grid[data-row="7"] {margin-top: 252px;}
-.grid[data-row="8"] {margin-top: 288px;}
+.grid[data-row="0"] {margin-top: @grid_length * 0;}
+.grid[data-row="1"] {margin-top: @grid_length * 1;}
+.grid[data-row="2"] {margin-top: @grid_length * 2;}
+.grid[data-row="3"] {margin-top: @grid_length * 3;}
+.grid[data-row="4"] {margin-top: @grid_length * 4;}
+.grid[data-row="5"] {margin-top: @grid_length * 5;}
+.grid[data-row="6"] {margin-top: @grid_length * 6;}
+.grid[data-row="7"] {margin-top: @grid_length * 7;}
+.grid[data-row="8"] {margin-top: @grid_length * 8;}
 
 
-.grid[data-col="0"] {margin-left: 0px;}
-.grid[data-col="1"] {margin-left: 36px;}
-.grid[data-col="2"] {margin-left: 72px;}
-.grid[data-col="3"] {margin-left: 108px;}
-.grid[data-col="4"] {margin-left: 144px;}
-.grid[data-col="5"] {margin-left: 180px;}
-.grid[data-col="6"] {margin-left: 216px;}
-.grid[data-col="7"] {margin-left: 252px;}
-.grid[data-col="8"] {margin-left: 288px;}
+.grid[data-col="0"] {margin-left: @grid_length * 0;}
+.grid[data-col="1"] {margin-left: @grid_length * 1;}
+.grid[data-col="2"] {margin-left: @grid_length * 2;}
+.grid[data-col="3"] {margin-left: @grid_length * 3;}
+.grid[data-col="4"] {margin-left: @grid_length * 4;}
+.grid[data-col="5"] {margin-left: @grid_length * 5;}
+.grid[data-col="6"] {margin-left: @grid_length * 6;}
+.grid[data-col="7"] {margin-left: @grid_length * 7;}
+.grid[data-col="8"] {margin-left: @grid_length * 8;}
 
 
-.grid[data-block="0"] {background-color: #ececec}
-.grid[data-block="1"] {background-color: #fcfcfc}
-.grid[data-block="2"] {background-color: #ececec}
-.grid[data-block="3"] {background-color: #fcfcfc}
-.grid[data-block="4"] {background-color: #ececec}
-.grid[data-block="5"] {background-color: #fcfcfc}
-.grid[data-block="6"] {background-color: #ececec}
-.grid[data-block="7"] {background-color: #fcfcfc}
-.grid[data-block="8"] {background-color: #ececec}
+.grid[data-block="0"] {background-color: @odd_block_color}
+.grid[data-block="1"] {background-color: @even_block_color}
+.grid[data-block="2"] {background-color: @odd_block_color}
+.grid[data-block="3"] {background-color: @even_block_color}
+.grid[data-block="4"] {background-color: @odd_block_color}
+.grid[data-block="5"] {background-color: @even_block_color}
+.grid[data-block="6"] {background-color: @odd_block_color}
+.grid[data-block="7"] {background-color: @even_block_color}
+.grid[data-block="8"] {background-color: @odd_block_color}
 
 @-webkit-keyframes blink {  
   from { background-color: #06c; color: white}
@@ -146,8 +156,8 @@ input.grid:hover {
 }
 
 input.grid { 
-  width: 34px;
-  height: 34px;
+  width: @grid_length;
+  height: @grid_length;
   font-size: 20px;
   padding: 0px;
   line-height: 20px;
@@ -166,7 +176,9 @@ input.grid {
   -moz-animation-iteration-count: 1;  
   -moz-animation-duration: 0.4s; 
   border-radius: 0;
-  box-sizing: content-box;
+  box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  -moz-box-sizing:border-box;
   opacity: 1;
 }
 
@@ -175,7 +187,7 @@ input.grid:disabled {
   cursor: auto;
 }
 
-#sudoku input.grid.error {background-color: #fcc}
+input.grid.error {background-color: #fcc}
 
 #congratulation {
   position: absolute;
@@ -185,14 +197,13 @@ input.grid:disabled {
   background-color: #933;
   left: 0;
   top: 200px;
-}
-
-#congratulation h2 {
-  font-size: 36px;
-  font-family: 'Vollkorn',serif;
-  font-style: italic;
-  font-weight: bold;
-  color: #ffcc00;
+  h2 {
+    font-size: 36px;
+    font-family: 'Vollkorn',serif;
+    font-style: italic;
+    font-weight: bold;
+    color: #ffcc00;
+  }
 }
 
 #say{
