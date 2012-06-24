@@ -31,24 +31,60 @@ GameInit = ->
       col++
 
 if Meteor.is_client
+  
+  (($) -> #jQuery cookie
+    $.cookie = (key, value, options) ->
+      if arguments.length > 1 and (not /Object/.test(Object::toString.call(value)) or value is null or value is `undefined`)
+        options = $.extend({}, options)
+        options.expires = -1  if value is null or value is `undefined`
+        if typeof options.expires is "number"
+          days = options.expires
+          t = options.expires = new Date()
+          t.setDate t.getDate() + days
+        value = String(value)
+        return (document.cookie = [ encodeURIComponent(key), "=", (if options.raw then value else encodeURIComponent(value)), (if options.expires then "; expires=" + options.expires.toUTCString() else ""), (if options.path then "; path=" + options.path else ""), (if options.domain then "; domain=" + options.domain else ""), (if options.secure then "; secure" else "") ].join(""))
+      options = value or {}
+      decode = (if options.raw then (s) -> s else decodeURIComponent)
+      pairs = document.cookie.split("; ")
+      i = 0
+      pair = undefined
+      while pair = pairs[i] and pairs[i].split("=")
+        return decode(pair[1] or "")  if decode(pair[0]) is key
+        i++
+      null
+  ) jQuery
+
+  $ =>
+    @current_player_hash = $.cookie('player_hash')
+    @current_player_name = $.cookie('player_name')
+
   Template.join.events = submit: (event) =>
     event.preventDefault()
-    if $.trim($("#name").val()) == ''
+    name = $.trim($("#name").val())
+    if name == ''
       alert "Player name can not be empty!"
     else
       random_color = "##{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}"
       @current_player_hash = Players.insert(
-        name: $("#name").val()
+        name: name
         color: random_color
         score: 0
       , ->
         @current_player = Players.findOne(@current_player_hash)
+        @current_player_name = name
+        $.cookie('player_hash',@current_player_hash)
+        $.cookie('player_name', name)
       )
       $(event.target).replaceWith Meteor.ui.render(Template.join)
       $("#say").replaceWith Meteor.ui.render(Template.say)
 
-  Template.say.has_current_player = Template.join.has_current_player = =>
-    typeof (@current_player_hash) isnt "undefined" and Players.find(current_player_hash)
+  Template.say.has_current_player = Template.join.has_current_player = ->
+    if current_player_hash? and Players.findOne(current_player_hash)?
+      true
+    else
+      false
+
+  Template.join.player_name = -> current_player_name
 
   Template.sudoku.grids = -> Grids.find {}
 
@@ -144,6 +180,7 @@ if Meteor.is_client
   Template.say.events = submit: (event) ->
     event.preventDefault()
     say = $(event.target)
+    @current_player ?= Players.findOne(@current_player_hash)
     if current_player and $.trim(say.find("input#content").val()) != ''
       Messages.insert
         content: say.find("input#content").val()
