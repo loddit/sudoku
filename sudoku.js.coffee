@@ -4,18 +4,25 @@ Messages = new Meteor.Collection("messages")
 Games = new Meteor.Collection("games")
 numbers = [ "", "1", "2", "3", "4", "5", "6", "7", "8", "9" ]
 
+ImportPuzzle = ->
+  _.each puzzles,(puzzle) ->
+    Games.insert {puzzle: puzzle}
+
 GameInit = ->
   Grids.remove {}
   Players.remove {}
   Messages.remove {}
+  if Games.find({}).count() == 0
+    ImportPuzzle()
+  games = Games.find({}).fetch()
   game = games[Math.floor(Math.random() * games.length)]
-  _.each game, (item, row) ->
+  _.each game.puzzle, (item, row) ->
     col = 0
 
     while col < item.length
       number = item[col]
       disabled = "disabled"
-      if number is `undefined`
+      if !number?
         number = ""
         disabled = ""
       Grids.insert
