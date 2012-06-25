@@ -36,6 +36,7 @@ Meteor.methods(
           color: "black"
         , ->
         col++
+    Games.update game._id, {$set:{restart_required_players: []}}
     @game = game
   ,
   get_current_game_hash: =>
@@ -72,7 +73,6 @@ if Meteor.is_client
   Meteor.startup =>
     Meteor.call 'get_current_game_hash',(error,result) =>
       @current_game_hash = result
-      Games.update current_game_hash, {$set:{restart_required_players: []}}
 
   Template.join.events =
     "submit #join": (event) =>
@@ -81,6 +81,7 @@ if Meteor.is_client
       if name == ''
         alert "Player name can not be empty!"
       else
+        $(event.target).find('input[type="submit"]').attr('disabled',true)
         random_color = "##{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}"
         @current_player_hash = Players.insert(
           name: name
