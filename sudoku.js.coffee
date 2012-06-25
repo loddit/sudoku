@@ -65,9 +65,11 @@ if Meteor.is_client
       null
   ) jQuery
 
-  Meteor.startup =>
+  $ =>
     @current_player_hash = $.cookie('player_hash')
     @current_player_name = $.cookie('player_name')
+
+  Meteor.startup =>
     Meteor.call 'get_current_game_hash',(error,result) =>
       @current_game_hash = result
       Games.update current_game_hash, {$set:{restart_required_players: []}}
@@ -94,7 +96,7 @@ if Meteor.is_client
         $("#say").replaceWith Meteor.ui.render(Template.say)
 
   Template.say.has_current_player = Template.join.has_current_player = ->
-    if current_player_hash? and Players.findOne(current_player_hash)?
+    if current_player_hash? and Players.findOne(current_player_hash)
       true
     else
       false
