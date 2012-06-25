@@ -2,7 +2,7 @@
 @grid_length: 36px;
 @odd_block_color: #e9e9e9;
 @even_block_color: #fcfcfc;
-@sidebar_width: 140px; 
+@sidebar_width: 150px; 
 
 body {
   background-image: url('/bright_squares.png');
@@ -16,7 +16,7 @@ body {
   p {
     font-size: 11px;
     color: #666;
-    margin: 6px 0 2px;
+    margin: 6px 0 4px;
   }
 }
 
@@ -110,9 +110,10 @@ input#name, input#content {
 #rank {
  font-family: 'Quantico', sans-serif;
 
- tr {border-bottom: 1px solid gray}
- td:first-child {width: 90px}
- td:last-child {width: 40px;text-align: right}
+ tr {border: none; padding: none}
+ td {border: none; padding: none}
+ td:first-child {width: 99px;}
+ td:last-child {width: 41px;text-align: right;}
  .current {position: absolute;margin-left: -15px}
 }
 
