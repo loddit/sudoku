@@ -7,12 +7,19 @@
 <body>
   <div id="dashboard">
     <h1 id="logo">SUDOKU</h1>
-    <span id="subtitle">Multilyplayer sudoku game<span>
+    <span id="subtitle">Multilyplayer sudoku game</span>
     {{> sidebar}}
+    {{> timer}}
     {{> sudoku}}
     {{> chatroom}}
   </div>
 </body>
+
+<template name="timer">
+  {{server_time}}
+  {{start_at_time}}
+  <div id="timer"></div>
+</template>
 
 <template name="sidebar">
   <div id="sidebar">

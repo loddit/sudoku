@@ -40,8 +40,12 @@ Meteor.methods(
   ,
   get_current_game_hash: =>
     @current_game?._id
-  get_current_timer: =>
+  get_current_time: =>
     new Date()
+  get_start_at_time: =>
+    if @current_game
+      new Date(@current_game.start_at)
+    
 )
 
 if Meteor.is_client
@@ -74,6 +78,26 @@ if Meteor.is_client
   Meteor.startup =>
     Meteor.call 'get_current_game_hash',(error,result) =>
       @current_game_hash = result
+      duration = 0
+      setInterval( ()->
+        time = (new Date(@server_time) - new Date(@start_at_time) + duration)/1000
+        second = "#{Math.floor time%60}"
+        second = "0#{second}" if second.length == 1
+        min = Math.floor time/60
+        duration += 1000
+        $("#timer").html "#{min} : #{second}"
+      ,1000)
+
+
+  Template.timer.server_time = =>
+    Meteor.call 'get_current_time',(error,result) =>
+      @server_time = result
+    @current_game_hash
+
+  Template.timer.start_at_time = =>
+    Meteor.call 'get_start_at_time',(error,result) =>
+      @start_at_time = result
+    @current_game_hash
 
   Template.join.events =
     "submit #join": (event) =>
