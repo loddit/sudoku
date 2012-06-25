@@ -22,6 +22,7 @@
 </template>
 
 <template name="join">
+  {{load_game_hash}}
   {{#if has_current_player }}
     <div id="tips">
       <p><b>Game Started !</b></p>
@@ -47,9 +48,9 @@
 
 <template name="sudoku">
   <div id="sudoku">
-  {{#each grids}}
-    {{>grid}}
-  {{/each}}
+    {{#each grids}}
+      {{>grid}}
+    {{/each}}
   </div>
 </template>
 

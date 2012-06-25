@@ -9,15 +9,15 @@ ImportPuzzle = ->
     Games.insert {puzzle: puzzle}
 
 Meteor.methods(
-  game_init: =>
+  start_game: =>
     Grids.remove {}
     Players.remove {}
     Messages.remove {}
     if Games.find({}).count() == 0
       ImportPuzzle()
     games = Games.find({}).fetch()
-    game = games[Math.floor(Math.random() * games.length)]
-    _.each game.puzzle, (item, row) ->
+    @current_game = games[Math.floor(Math.random() * games.length)]
+    _.each @current_game.puzzle, (item, row) ->
       col = 0
       while col < item.length
         number = item[col]
@@ -36,11 +36,12 @@ Meteor.methods(
           color: "black"
         , ->
         col++
-    Games.update game._id, {$set:{restart_required_players: [],ready: true}}
-    @game = game
+    Games.update @current_game._id, {$set:{restart_required_players: [],start_at: new Date}}
   ,
   get_current_game_hash: =>
-    @game?._id
+    @current_game?._id
+  get_current_timer: =>
+    new Date()
 )
 
 if Meteor.is_client
@@ -106,6 +107,9 @@ if Meteor.is_client
 
   Template.join.player_name = -> if current_player_name? then current_player_name else ''
   
+  Template.join.load_game_hash = =>
+    Meteor.call 'get_current_game_hash',(error,result) =>
+      @current_game_hash = result
   Template.sudoku.grids = -> Grids.find {}
 
   Template.grid.is_error = -> @error is true
@@ -203,16 +207,11 @@ if Meteor.is_client
   Template.restart.events =
     "submit #restart": (event) =>
       event.preventDefault()
-      current_game = Games.findOne current_game_hash
-      restart_required_players = current_game.restart_required_players.concat(@current_player_hash)
-      Games.update current_game_hash, {$set:{restart_required_players: restart_required_players}}
+      Games.update current_game_hash, {$push:{restart_required_players: @current_player_hash}}
       if Template.restart.counter() >= Template.restart.condition()
-        Meteor.call('game_init')
+        Meteor.call('start_game')
         current_player_hash = current_player = undefined
         $(Template.join).replaceWith Meteor.ui.render(Template.join)
-        Meteor.call 'get_current_game_hash',(error,result) =>
-          @current_game_hash = result
-          Games.update current_game_hash, {$set:{restart_required_players: []}}
 
   Template.chatroom.messages = ->
     Messages.find {},
@@ -232,5 +231,4 @@ if Meteor.is_client
 
 if Meteor.is_server
   Meteor.startup ->
-    Meteor.call('game_init')
-    
+    Meteor.call('start_game')
