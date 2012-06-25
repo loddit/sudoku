@@ -105,6 +105,8 @@ if Meteor.is_client
     else
       false
 
+  Template.join.has_players = -> Players.find().count() > 0
+
   Template.join.player_name = -> if current_player_name? then current_player_name else ''
   
   Template.join.load_game_hash = =>
