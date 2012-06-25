@@ -18,6 +18,6 @@ Todo list
 
 1. Use Games model for puzzle storage[Doing]
 2. Use coffeescript[Done]
-3. Use Less
+3. Use Less[Done]
 4. Design Rule (Bouns and Penalty)
 5. Use Cookie to remember player status[Done]
