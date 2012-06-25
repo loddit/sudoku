@@ -36,7 +36,7 @@ Meteor.methods(
           color: "black"
         , ->
         col++
-    Games.update game._id, {$set:{restart_required_players: []}}
+    Games.update game._id, {$set:{restart_required_players: [],ready: true}}
     @game = game
   ,
   get_current_game_hash: =>
@@ -80,19 +80,21 @@ if Meteor.is_client
       name = $.trim($("#name").val())
       if name == ''
         alert "Player name can not be empty!"
+      else if  Players.find({}).count >= 9
+        alert "Game limited to 9 player"
       else
-        $(event.target).find('input[type="submit"]').attr('disabled',true)
         random_color = "##{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}"
         @current_player_hash = Players.insert(
           name: name
           color: random_color
           score: 0
-        , ->
+        , =>
           @current_player = Players.findOne(@current_player_hash)
           @current_player_name = name
           $.cookie('player_hash',@current_player_hash)
           $.cookie('player_name', name)
         )
+        $(event.target).html('')
         $(event.target).replaceWith Meteor.ui.render(Template.join)
         $("#say").replaceWith Meteor.ui.render(Template.say)
 
@@ -103,7 +105,7 @@ if Meteor.is_client
       false
 
   Template.join.player_name = -> if current_player_name? then current_player_name else ''
-
+  
   Template.sudoku.grids = -> Grids.find {}
 
   Template.grid.is_error = -> @error is true
