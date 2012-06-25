@@ -17,6 +17,8 @@ Meteor.methods(
       ImportPuzzle()
     games = Games.find({}).fetch()
     @current_game = games[Math.floor(Math.random() * games.length)]
+    @current_game.start_at = new Date()
+    Games.update @current_game._id, {$set:{restart_required_players: [],start_at: new Date()}}
     _.each @current_game.puzzle, (item, row) ->
       col = 0
       while col < item.length
@@ -36,7 +38,6 @@ Meteor.methods(
           color: "black"
         , ->
         col++
-    Games.update @current_game._id, {$set:{restart_required_players: [],start_at: new Date}}
   ,
   get_current_game_hash: =>
     @current_game?._id
