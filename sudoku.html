@@ -16,9 +16,17 @@
 </body>
 
 <template name="timer">
-  {{server_time}}
-  {{start_at_time}}
-  <div id="timer"></div>
+  <div id="time_backup">
+    {{#if has_players }}
+      {{server_time}}
+      {{start_at_time}}
+    {{else}}
+      {{server_time}}
+      {{start_at_time}}
+    {{/if}}
+  </div>
+  <div id="timer">　
+  </div>
 </template>
 
 <template name="sidebar">

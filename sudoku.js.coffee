@@ -46,7 +46,13 @@ Meteor.methods(
   get_start_at_time: =>
     if @current_game
       new Date(@current_game.start_at)
-    
+  set_best_record: =>
+    if @current_game?.best_record
+      current_duration = new Date() - new Date(@current_game.start_at)
+      Games.update(@current_game?._id,{$set:{best_record: current_duration}}) if current_duration < best_record
+    else if @current_duration?
+      current_duration = new Date() - new Date(@current_game.start_at)
+      Games.update(@current_game?._id,{$set:{best_record: current_duration}})
 )
 
 if Meteor.is_client
@@ -79,14 +85,15 @@ if Meteor.is_client
   Meteor.startup =>
     Meteor.call 'get_current_game_hash',(error,result) =>
       @current_game_hash = result
-      duration = 0
+      @duration = 0
       setInterval( ()->
         time = (new Date(@server_time) - new Date(@start_at_time) + duration)/1000
         second = "#{Math.floor time%60}"
         second = "0#{second}" if second.length == 1
         min = Math.floor time/60
         duration += 1000
-        $("#timer").html "#{min} : #{second}"
+        formated_time = "#{min} : #{second}"
+        $("#timer").html formated_time if $.trim(formated_time).length != 0
       ,1000)
 
 
@@ -98,6 +105,8 @@ if Meteor.is_client
   Template.timer.start_at_time = =>
     Meteor.call 'get_start_at_time',(error,result) =>
       @start_at_time = result
+      @duration = 0
+      $("#stop_timer").attr("id","timer")
     @current_game_hash
 
   Template.join.events =
@@ -130,7 +139,7 @@ if Meteor.is_client
     else
       false
 
-  Template.join.has_players = -> Players.find().count() > 0
+  Template.join.has_players = Template.timer.has_players = -> Players.find().count() > 0
 
   Template.join.player_name = -> if current_player_name? then current_player_name else ''
   
@@ -179,6 +188,8 @@ if Meteor.is_client
       , ->
         remains = (Grids.find(error: "true").count() + Grids.find(number: "").count())
         if remains is 0
+          $("#timer").attr("id","stop_timer")
+          Meteor.call('set_best_record')
           winner = Players.findOne({},
             sort:
               score: -1
