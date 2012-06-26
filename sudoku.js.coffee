@@ -4,17 +4,24 @@ Messages = new Meteor.Collection("messages")
 Games = new Meteor.Collection("games")
 numbers = [ "", "1", "2", "3", "4", "5", "6", "7", "8", "9" ]
 
-ImportPuzzle = ->
-  _.each puzzles,(puzzle) ->
-    Games.insert {puzzle: puzzle}
+format_time = (time) ->
+  time = time/1000
+  second = "#{Math.floor time%60}"
+  second = "0#{second}" if second.length == 1
+  min = Math.floor time/60
+  "#{min}:#{second}"
 
 Meteor.methods(
+  import_puzzles: =>
+    _.each puzzles,(puzzle) ->
+      Games.insert {puzzle: puzzle}
+
   start_game: =>
     Grids.remove {}
     Players.remove {}
     Messages.remove {}
     if Games.find({}).count() == 0
-      ImportPuzzle()
+      Meteor.call("import_puzzles")
     games = Games.find({}).fetch()
     @current_game = games[Math.floor(Math.random() * games.length)]
     @current_game.start_at = new Date()
@@ -46,13 +53,15 @@ Meteor.methods(
   get_start_at_time: =>
     if @current_game
       new Date(@current_game.start_at)
-  set_best_record: =>
-    if @current_game?.best_record
-      current_duration = new Date() - new Date(@current_game.start_at)
-      Games.update(@current_game?._id,{$set:{best_record: current_duration}}) if current_duration < best_record
-    else if @current_duration?
-      current_duration = new Date() - new Date(@current_game.start_at)
-      Games.update(@current_game?._id,{$set:{best_record: current_duration}})
+  get_record: =>
+    @current_game?.record
+  set_record: =>
+    if @current_game?.record?
+      @game_duration = new Date() - new Date(@current_game.start_at)
+      Games.update(@current_game?._id,{$set:{record: @game_duration}}) if @game_duration < @current_game?.record
+    else if @current_game?
+      @game_duration = new Date() - new Date(@current_game.start_at)
+      Games.update(@current_game?._id,{$set:{record: @game_duration}})
 )
 
 if Meteor.is_client
@@ -87,27 +96,36 @@ if Meteor.is_client
       @current_game_hash = result
       @duration = 0
       setInterval( ()->
-        time = (new Date(@server_time) - new Date(@start_at_time) + duration)/1000
-        second = "#{Math.floor time%60}"
-        second = "0#{second}" if second.length == 1
-        min = Math.floor time/60
+        time = (new Date(@server_time) - new Date(@start_at_time) + duration)
+        $("#timer").html format_time(time)
+        $("#record").html "Record=#{format_time(@game_record)}" if @game_record
         duration += 1000
-        formated_time = "#{min} : #{second}"
-        $("#timer").html formated_time if $.trim(formated_time).length != 0
       ,1000)
 
 
-  Template.timer.server_time = =>
+  Template.status.server_time = =>
     Meteor.call 'get_current_time',(error,result) =>
       @server_time = result
     @current_game_hash
 
-  Template.timer.start_at_time = =>
+  Template.status.start_at_time = =>
     Meteor.call 'get_start_at_time',(error,result) =>
       @start_at_time = result
       @duration = 0
-      $("#stop_timer").attr("id","timer")
     @current_game_hash
+
+  Template.status.record = =>
+    Meteor.call 'get_record',(error,result) =>
+      @game_record = result
+    @current_game_hash
+
+  Template.status.game_finish = ->
+    if @current_game_hash and (Grids.find(error: "true").count() + Grids.find(number: "").count()) == 0
+      Meteor.call('set_record')
+      $('#timer').attr('id','stoped_timer')
+      true
+
+  Template.status.stop_timmer = ->
 
   Template.join.events =
     "submit #join": (event) =>
@@ -137,9 +155,10 @@ if Meteor.is_client
     if current_player_hash? and Players.findOne(current_player_hash)
       true
     else
+      $('#stoped_timer').attr('id','timer')
       false
 
-  Template.join.has_players = Template.timer.has_players = -> Players.find().count() > 0
+  Template.join.has_players = Template.status.has_players = -> Players.find().count() > 0
 
   Template.join.player_name = -> if current_player_name? then current_player_name else ''
   
@@ -188,13 +207,11 @@ if Meteor.is_client
       , ->
         remains = (Grids.find(error: "true").count() + Grids.find(number: "").count())
         if remains is 0
-          $("#timer").attr("id","stop_timer")
-          Meteor.call('set_best_record')
+          Meteor.call('ret_record')
           winner = Players.findOne({},
             sort:
               score: -1
           )
-          $("#dashboard").append Meteor.ui.render(Template.congratulation)
 
       score = Grids.find(
         player: current_player_hash

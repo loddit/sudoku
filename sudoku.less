@@ -6,7 +6,10 @@
 
 body {
   background-image: url('/bright_squares.png');
+  font-family: 'Quantico', sans-serif;
 }
+
+.hidden {display: none}
 
 #join {
   padding: 10px 0;
@@ -14,6 +17,7 @@ body {
 
 #tips { 
   p {
+    font-family: Helvetica Neue, Helvetica, Arial;
     font-size: 11px;
     color: #666;
     margin: 6px 0 4px;
@@ -21,8 +25,7 @@ body {
 }
 
 h1#logo {
-  text-align: left;
-  font-family: 'Quantico', sans-serif;
+  margin-top: 20px;
   font-size: 40px;
   position: relative;
   -webkit-mask: -webkit-gradient(linear,0% 0%,0% 100%,from(rgba(255,255,255,0.6)),to(rgba(0,0,0,0.8)));
@@ -30,17 +33,34 @@ h1#logo {
   text-shadow: 0 0 2px rgba(255,255,255,1);
 }
 
-#timer {
-  font-family: 'Quantico', sans-serif;
+#dashboard {
+  width: @grid_length * 9;
+  height: 22px;
 }
-#time_backup {display: none}
+
+#record {
+  color: #999;
+  font-size: 12px;
+  float: right;
+  line-height: 24px;
+}
+
 #subtitle {
   position: absolute;
-  color: gray;
-  margin-top: -32px;
+  text-align: right;
+  font-family: Helvetica Neue, Helvetica, Arial;
+  font-size: 13px;
+  line-height: 16px;
+  color: #999;
+  margin-top: -72px;
+  margin-left: 180px;
+  a {color: #bbb;
+    text-decoration: none;
+  }
 }
 
 #sidebar {
+  padding: 18px;
   width: @sidebar_width;
   float: right;
 }
@@ -112,13 +132,12 @@ input#name, input#content {
   cursor: auto;
 }
 
-#dashboard {
+#wrapper {
   width: 540px;
   margin: 0px auto;
 }
 
 #rank {
- font-family: 'Quantico', sans-serif;
 
  tr {border: none; padding: none}
  td {border: none; padding: none}
@@ -192,9 +211,9 @@ input.grid {
   width: @grid_length;
   height: @grid_length;
   font-size: 20px;
+  font-family: 'Quantico', sans-serif;
   padding: 0px;
   line-height: 20px;
-  font-family: 'Quantico', sans-serif;
   text-align: center;
   display: block;
   border: 1px solid #666;
@@ -223,20 +242,11 @@ input.grid:disabled {
 input.grid.error {background-color: #fcc}
 
 #congratulation {
-  position: absolute;
-  z-index: 1;
-  width: 100%;
-  text-align: center;
-  background-color: #933;
-  left: 0;
-  top: 200px;
-  h2 {
-    font-size: 36px;
-    font-family: 'Vollkorn',serif;
-    font-style: italic;
-    font-weight: bold;
-    color: #ffcc00;
-  }
+  color: #3366cc;
+  -webkit-appearance: none;
+  -webkit-animation-name: fadein;  
+  -webkit-animation-iteration-count: 1;  
+  -webkit-animation-duration: 0.4s; 
 }
 
 #say{
@@ -248,7 +258,6 @@ p.message {
   margin: 2px 0;
   padding: 2px;
   font-size: 11px;
-  font-family: 'Quantico', sans-serif;
   -webkit-appearance: none;
   -webkit-animation-name: fadein;  
   -webkit-animation-iteration-count: 1;  
@@ -262,6 +271,5 @@ p.message {
 
 #chatroom h4 {
   color: gray;
-  font-family: 'Quantico', sans-serif;
   margin: 10px 0 6px;
 }

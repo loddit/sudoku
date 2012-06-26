@@ -1,32 +1,53 @@
 <head>
   <title>Sudoku</title>
   <link href='http://fonts.googleapis.com/css?family=Quantico:700' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Vollkorn:700italic' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
-  <div id="dashboard">
+  <div id="wrapper">
     <h1 id="logo">SUDOKU</h1>
-    <span id="subtitle">Multilyplayer sudoku game</span>
+    <div id="subtitle">
+      powered and hosted by 
+      <a href="http://meteor.com/" title="Meteor" >Meteor</a>
+      <br/>
+      <a href="http://github.com/loddit/sudoku" title="deploy" >deploy</a> this game by yourself
+    </div>
     {{> sidebar}}
-    {{> timer}}
+    {{> dashboard}}
     {{> sudoku}}
     {{> chatroom}}
   </div>
 </body>
 
-<template name="timer">
-  <div id="time_backup">
-    {{#if has_players }}
-      {{server_time}}
-      {{start_at_time}}
-    {{else}}
-      {{server_time}}
-      {{start_at_time}}
+<template name="dashboard">
+
+  <div id="dashboard">
+    {{>status}}
+    <span id="timer">　
+    </span>
+    <span id="record">　
+    </span>
+  </div>
+</template>
+
+<template name="status">
+    <div class="hidden">
+      {{#if has_players }}
+        {{server_time}}
+        {{start_at_time}}
+        {{record}}
+      {{else}}
+        {{server_time}}
+        {{start_at_time}}
+        {{record}}
+      {{/if}}
+    </div>
+    {{#if game_finish}}
+      <span id="congratulation"> Congratulation!</span>
+      <div class="hidden">
+        {{record}}
+      </div>
     {{/if}}
-  </div>
-  <div id="timer">　
-  </div>
 </template>
 
 <template name="sidebar">
@@ -50,7 +71,7 @@
         You can not change grid that other player filled, unless it is obviously wrong.
       </p>
       <p>
-        Playing together for fun
+        Playing together for fun ~
       </p>
     </div >
     {{>restart}}
@@ -103,12 +124,6 @@
   </tr>
 </template>
 
-<template name="congratulation">
-  <div id="congratulation">
-    <h2>Congratulation!</h2>
-  </div>
-</template>
-
 <template name="chatroom">
   <div id="chatroom">
     <h4>Chatroom:</h4>
@@ -129,7 +144,6 @@
   <form id="say">
     {{#if has_current_player }}
       <input id="content" name="content" value="" placeholder="Send message"/>
-    {{else}}
     {{/if}}
   </form>
 </template>
