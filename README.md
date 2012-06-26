@@ -23,6 +23,8 @@ Todo list
 4. Design Rule (Bouns and Penalty)
 5. Use Cookie to remember player status[Done]
 6. Save Best record[Done]
+7. Timer system[Done]
+8. Finish notice[Done]
 
 
 
