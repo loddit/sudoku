@@ -17,8 +17,8 @@ format_time = (time) ->
 
 Meteor.methods(
   import_puzzles: =>
-    _.each puzzles,(puzzle) ->
-      Game.insert {puzzle: puzzle}
+    _.each puzzles,(puzzle,index) ->
+      Game.insert {puzzle: puzzle, id: index}
 
   start_game: =>
     Grid.remove {}
@@ -145,7 +145,7 @@ if Meteor.is_client
       $('#stoped_timer').attr('id','timer')
       false
 
-  Template.join.events =
+  Template.dashboard.events =
     "submit #join": (event) =>
       event.preventDefault()
       name = $.trim($("#name").val())
@@ -167,20 +167,20 @@ if Meteor.is_client
           $.cookie('player_name', name)
         )
         $(event.target).html('')
-        $(event.target).replaceWith Meteor.ui.render(Template.join)
+        $(event.target).replaceWith Meteor.ui.render(Template.dashboard)
         $("#say").replaceWith Meteor.ui.render(Template.say)
 
-  Template.say.has_current_player = Template.join.has_current_player = ->
+  Template.say.has_current_player = Template.dashboard.has_current_player = ->
     if current_player_hash? and Player.findOne(current_player_hash)
       true
     else
       false
 
-  Template.join.has_players = Template.status.has_players = -> Player.find().count() > 0
+  Template.dashboard.has_players = Template.status.has_players = -> Player.find().count() > 0
 
-  Template.join.player_name = -> if current_player_name? then current_player_name else ''
+  Template.dashboard.player_name = -> if current_player_name? then current_player_name else ''
   
-  Template.join.load_game_hash = =>
+  Template.dashboard.load_game_hash = =>
     Meteor.call 'get_current_game_hash',(error,result) =>
       @current_game_hash = result
       @duration = 0

@@ -11,9 +11,18 @@ body {
 
 .hidden {display: none}
 
-#join {
-  padding: 10px 0;
+#dashboard {
+  float: left;
+  width: 150px;
 }
+
+#separater {
+  width: 20px;
+  height: 1px;
+  float: left;
+}
+
+#join {padding: 10px 0;}
 
 #tips { 
   p {
@@ -41,8 +50,14 @@ h1#logo {
 
 }
 
-#dashboard {
+#main {
+  float: left;
+  margin-right: 60px;
+}
+
+#notification {
   width: @grid_length * 9;
+  padding: 1px;
   height: 22px;
 }
 
@@ -67,9 +82,10 @@ h1#logo {
 }
 
 #sidebar {
-  padding: 18px;
-  width: @sidebar_width;
-  float: right;
+  padding: 18px 1px;
+  min-width: @sidebar_width;
+  max-width: @grid_length * 9;
+  overflow: hidden;
 }
 
 input#name, input#content { 
@@ -93,7 +109,7 @@ input#name, input#content {
 }
 
 #name {width: @sidebar_width;}
-#content {width: 480px;}
+#content {width: 100%;}
   
 .radius_button {
   display: inline-block;
@@ -141,11 +157,13 @@ input#name, input#content {
 }
 
 #wrapper {
-  width: 540px;
+  min-width: @grid_length * 9;
+  max-width: 540px;
   margin: 0px auto;
 }
 
 #rank {
+  float: right;
   tr {border: none; padding: none}
   td {border: none; padding: none}
   td:first-child {width: 99px;}
@@ -289,7 +307,18 @@ p.message {
 
 }
 
+#chatroom {
+  width: 100%;
+  overflow: hidden;
+}
+
 #chatroom h4 {
   color: gray;
   margin: 10px 0 6px;
+}
+
+
+@media only screen (min-device-width:1px) and (max-device-width:480px) {
+  #wrapper { width: 360px}
+
 }

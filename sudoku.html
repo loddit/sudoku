@@ -7,21 +7,22 @@
   <div id="wrapper">
     <h1 id="logo">SUDOKU</h1>
     <div id="subtitle">
-      powered and hosted by 
-      <a href="http://meteor.com/" title="Meteor" >Meteor</a>
+      a multiplayer sudoku
       <br/>
-      <a href="http://github.com/loddit/sudoku" title="deploy" >deploy</a> this game by yourself
+      powered by 
+      <a href="http://meteor.com/" title="Meteor" >Meteor</a>
+    </div>
+    <div id="main">
+      {{> notification}}
+      {{> sudoku}}
     </div>
     {{> sidebar}}
-    {{> dashboard}}
-    {{> sudoku}}
     {{> chatroom}}
   </div>
 </body>
 
-<template name="dashboard">
-
-  <div id="dashboard">
+<template name="notification">
+  <div id="notification">
     {{>status}}
     <span id="timer">　
     </span>
@@ -53,35 +54,37 @@
 <template name="sidebar">
   <div id="sidebar">
     {{> rank}}
-    {{> join}}
+    {{> dashboard}}
   </div>
 </template>
 
-<template name="join">
-  {{#if has_players }}
-    {{load_game_hash}}
-  {{/if}}
-  {{#if has_current_player }}
-    <div id="tips">
-      <p><b>Game Started !</b></p>
-      <p>
-        Be careful to fill each grid to ensure your answer is correct.
-      </p>
-      <p>
-        You can not change grid that other player filled, unless it is obviously wrong or its player is offline.
-      </p>
-      <p>
-        Playing together for fun ~
-      </p>
-    </div >
-    {{>restart}}
-  {{else}}
-    <form id="join">
-      <input id="name" name="name" value="{{player_name}}" placeholder="Your Name" />
-      <br/>   
-      <input type="submit" value="Join Game !">
-    </form>
-  {{/if}}
+<template name="dashboard">
+  <div id="dashboard">
+    {{#if has_players }}
+      {{load_game_hash}}
+    {{/if}}
+    {{#if has_current_player }}
+      <div id="tips">
+        <p><b>Game Started !</b></p>
+        <p>
+          Be careful to fill each grid to ensure your answer is correct.
+        </p>
+        <p>
+          You can not change grid that other player filled, unless it is obviously wrong or its player is offline.
+        </p>
+        <p>
+          Playing together for fun ~
+        </p>
+      </div >
+      {{>restart}}
+    {{else}}
+      <form id="join">
+        <input id="name" name="name" value="{{player_name}}" placeholder="Your Name" />
+        <br/>   
+        <input type="submit" value="Join Game !">
+      </form>
+    {{/if}}
+  </div>
 </template>
 
 <template name="sudoku">
