@@ -25,6 +25,7 @@ Meteor.methods(
     games = Games.find({}).fetch()
     @current_game = games[Math.floor(Math.random() * games.length)]
     @current_game.start_at = new Date()
+    @online_players  = []
     Games.update @current_game._id, {$set:{restart_required_players: [],start_at: new Date()}}
     _.each @current_game.puzzle, (item, row) ->
       col = 0
@@ -62,6 +63,8 @@ Meteor.methods(
     else if @current_game?
       @game_duration = new Date() - new Date(@current_game.start_at)
       Games.update(@current_game?._id,{$set:{record: @game_duration}})
+  player_online_heartbeat: (player_hash) =>
+      @online_players = @online_players.concat(player_hash) if @online_players? and player_hash not in @online_players
 )
 
 if Meteor.is_client
@@ -99,6 +102,8 @@ if Meteor.is_client
         time = (new Date(@server_time) - new Date(@start_at_time) + duration)
         $("#timer").html format_time(time)
         $("#record").html "Record=#{format_time(@game_record)}" if @game_record
+        if @current_player_hash and Players.findOne @current_player_hash
+          Meteor.call('player_online_heartbeat',@current_player_hash, (error,result) -> {})
         duration += 1000
       ,1000)
 
@@ -133,7 +138,7 @@ if Meteor.is_client
       name = $.trim($("#name").val())
       if name == ''
         alert "Player name can not be empty!"
-      else if  Players.find({}).count >= 9
+      else if  Players.find({online: true}).count() >= 9
         alert "Game limited to 9 player"
       else
         random_color = "##{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}"
@@ -141,6 +146,7 @@ if Meteor.is_client
           name: name
           color: random_color
           score: 0
+          online: true
         , =>
           @current_player = Players.findOne(@current_player_hash)
           @current_player_name = name
@@ -246,7 +252,7 @@ if Meteor.is_client
   Template.rank.players = ->
     Players.find {}
 
-  Template.restart.condition = -> Math.floor(Players.find({}).count()/2) + 1
+  Template.restart.condition = -> Math.floor(Players.find({online: true}).count()/2) + 1
 
   Template.restart.counter = ->
     current_game = Games.findOne current_game_hash
@@ -285,5 +291,10 @@ if Meteor.is_client
       $(event.target).replaceWith Meteor.ui.render(Template.say)
 
 if Meteor.is_server
-  Meteor.startup ->
+  Meteor.startup =>
     Meteor.call('start_game')
+    Meteor.setInterval( ()=>
+      Players.update({},{$set: {online: false}})
+      Players.update(_id: {$in: @online_players},{$set: {online: true}})
+      @online_players = []
+    ,5000)

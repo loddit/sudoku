@@ -68,7 +68,7 @@
         Be careful to fill each grid to ensure your answer is correct.
       </p>
       <p>
-        You can not change grid that other player filled, unless it is obviously wrong.
+        You can not change grid that other player filled, unless it is obviously wrong or grid's player is offline.
       </p>
       <p>
         Playing together for fun ~
@@ -113,7 +113,7 @@
 </template>
 
 <template name="player">
-  <tr style="color:{{color}}">
+    <tr style="color:{{color}}" class="player {{#if online}}online{{else}}offline{{/if}}">
     <td>
       {{#if is_current_player}}
         <span class="current"> > </span>

@@ -26,11 +26,19 @@ body {
 
 h1#logo {
   margin-top: 20px;
+  margin-left: -1px;
   font-size: 40px;
   position: relative;
-  -webkit-mask: -webkit-gradient(linear,0% 0%,0% 100%,from(rgba(255,255,255,0.6)),to(rgba(0,0,0,0.8)));
-  -moz-mask: -webkit-gradient(linear,0% 0%,0% 100%,from(rgba(255,255,255,0.6)),to(rgba(0,0,0,0.8)));
-  text-shadow: 0 0 2px rgba(255,255,255,1);
+  color: #333;
+  -webkit-mask: -webkit-gradient(linear,0% 0%,0% 100%,from(rgba(255,255,255,0.6)),to(rgba(255,255,255,1)));
+  -moz-mask: -webkit-gradient(linear,0% 0%,0% 100%,from(rgba(255,255,255,0.6)),to(rgba(255,255,255,1)));
+  text-shadow:
+     0px 0px 1px #fff,  
+   -1px -1px 0px #fff,  
+    1px -1px 0px #fff,
+    -1px 1px 0px #fff,
+     1px 1px 0px #fff;
+
 }
 
 #dashboard {
@@ -137,13 +145,14 @@ input#name, input#content {
 }
 
 #rank {
-
  tr {border: none; padding: none}
  td {border: none; padding: none}
  td:first-child {width: 99px;}
  td:last-child {width: 41px;text-align: right;}
  .current {position: absolute;margin-left: -15px}
 }
+
+.player.offline {opacity: 0.2}
 
 #sudoku {
   border: 1px solid #666;
