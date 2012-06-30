@@ -157,13 +157,14 @@ input#name, input#content {
 }
 
 #wrapper {
-  min-width: @grid_length * 9;
+  min-width: @grid_length * 9 + 2;
   max-width: 540px;
   margin: 0px auto;
 }
 
 #rank {
   float: right;
+  color: #999;
   tr {border: none; padding: none}
   td {border: none; padding: none}
   td:first-child {width: 99px;}
@@ -319,6 +320,5 @@ p.message {
 
 
 @media only screen (min-device-width:1px) and (max-device-width:480px) {
-  #wrapper { width: 360px}
-
+  #wrapper { width: 360px }
 }
