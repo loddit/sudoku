@@ -154,7 +154,7 @@ if Meteor.is_client
       else if  Player.find({online: true}).count() >= 9
         alert "Game limited to 9 player"
       else
-        random_color = "##{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}#{Math.floor(Math.random() * 10)}"
+        random_color = "##{Math.floor(Math.random() * 7 + 3)}#{Math.floor(Math.random() * 7 + 3)}#{Math.floor(Math.random() * 7 + 3)}"
         @current_player_hash = Player.insert(
           name: name
           color: random_color
