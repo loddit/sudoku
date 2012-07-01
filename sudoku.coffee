@@ -38,7 +38,7 @@ Meteor.methods(
           number = ""
           disabled = ""
         Grid.insert
-          number: number
+          number: "#{number}"
           disabled: disabled
           row: row
           col: col
@@ -197,42 +197,49 @@ if Meteor.is_client
 
   Template.grid.events =
     change: (event) ->
-      grid = $(event.target)
-      number = $.trim(grid.val())
-      cols = $(".grid[data-col=#{grid.attr("data-col")}]").not(grid)
-      rows = $(".grid[data-row=#{grid.attr("data-row")}]").not(grid)
-      blocks = $(".grid[data-block=#{grid.attr("data-block")}]").not(grid)
-      set = _.uniq(_.map($.merge($.merge(cols, rows), blocks), (g) ->
-        g.value
-      ))
-      if number isnt "" and _.include(set, number) or not _.include(numbers, number)
-        error = true
+      target = $(event.target)
+      grid = Grid.findOne
+          row: parseInt(target.attr("data-row"))
+          col: parseInt(target.attr("data-col"))
+      number = $.trim(target.val())
+      if grid.player isnt current_player_hash and grid.player isnt "system" and !grid.error and Player.findOne(grid.player).online
+        alert "Unfortunately, other player is faster than you :("
       else
-        error = false
-      if number is ""
-        player_hash = "system"
-      else
-        player_hash = current_player_hash
-      Grid.update
-        row: parseInt(grid.attr("data-row"))
-        col: parseInt(grid.attr("data-col"))
-      ,
-        $set:
-          number: number
-          error: error
-          color: Player.findOne(current_player_hash).color
-          player: player_hash
-      ,
-        multi: true
-      , ->
-
-      score = Grid.find(
-        player: current_player_hash
-        error: false
-      ).count()
-      Player.update current_player_hash,
-        $set:
-          score: score
+        grids = Grid.find(
+          $or:
+            [
+              {row: grid.row,col:{$ne: grid.col}},
+              {col: grid.col,row:{$ne: grid.row}},
+              {block: grid.block,$and:[{col: {$ne: grid.col}},{row: {$ne: grid.row}}]}
+            ]
+        )
+        number_set = _.uniq(grids.map (g) ->
+          "#{g.number}"
+        )
+        if number isnt "" and _.include(number_set, number) or not _.include(numbers, number)
+          error = true
+        else
+          error = false
+        if number is ""
+          player_hash = "system"
+        else
+          player_hash = current_player_hash
+        Grid.update(
+          grid._id
+        ,
+          $set:
+            number: number
+            error: error
+            color: Player.findOne(current_player_hash).color
+            player: player_hash
+        )
+        score = Grid.find(
+          player: current_player_hash
+          error: false
+        ).count()
+        Player.update current_player_hash,
+          $set:
+            score: score
 
     click: (event) =>
       target = $(event.target)
@@ -251,8 +258,7 @@ if Meteor.is_client
           target.blur()
           event.preventDefault()
 
-  Template.rank.players = ->
-    Player.find {}
+  Template.rank.players = -> Player.find {}
 
   Template.restart.condition = -> Player.restart_condition()
 
