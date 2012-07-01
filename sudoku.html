@@ -103,10 +103,16 @@
 <template name="rank">
   <table id="rank">
     <thead>
-      <tr>
-        <td>Player</td>
-        <td>Score</td>
-      </tr>
+      {{#if players}}
+        <tr>
+          <td>Player</td>
+          <td>Score</td>
+        </tr>
+      {{else}}
+        <tr>
+          <td class="waiting">Waiting for players</td>
+        </tr>
+      {{/if}}
     </thead>
     <tbody>
       {{#each players}}

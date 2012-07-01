@@ -257,7 +257,7 @@ if Meteor.is_client
           target.blur()
           event.preventDefault()
 
-  Template.rank.players = -> Player.find {}
+  Template.rank.players = -> if Player.find().count() > 0 then Player.find {} else false
 
   Template.restart.condition = -> Player.restart_condition()
 
@@ -286,7 +286,8 @@ if Meteor.is_client
   Template.say.events = submit: (event) =>
     event.preventDefault()
     say = $(event.target)
-    if Player.findOne(@current_player_hash) and $.trim(say.find("input#content").val()) != ''
+    current_player = Player.findOne(@current_player_hash)
+    if current_player and $.trim(say.find("input#content").val()) != ''
       Message.insert
         content: say.find("input#content").val()
         player: current_player
