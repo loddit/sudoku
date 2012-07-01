@@ -1,7 +1,7 @@
 Grid = new Meteor.Collection("grids")
 Player = new Meteor.Collection("players")
 Message = new Meteor.Collection("messages")
-Game = new Meteor.Collection("ames")
+Game = new Meteor.Collection("games")
 
 Player.restart_condition = -> Math.floor(Player.find({online: true}).count()/2) + 1
 Player.restart_counter = -> Player.find({required_restrat: true,online: true}).count()
