@@ -30,9 +30,9 @@ Meteor.methods(
     game_count = Game.find({}).count()
     if puzzles.length > game_count
       Meteor.call("import_puzzles")
-    @playing_game = Game.findOne({id: Math.floor(Math.random() * game_count)})
+    @current_game = Game.findOne({id: Math.floor(Math.random() * game_count)})
     @online_players  = []
-    _.each @playing_game.puzzle, (item, row) =>
+    _.each @current_game.puzzle, (item, row) =>
       col = 0
       while col < item.length
         number = item[col]
@@ -50,25 +50,29 @@ Meteor.methods(
           error: false
           color: "black"
         col++
-    Game.update(@playing_game._id, {$set: {finished: false}})
+    Game.update(@current_game._id, {$set: {finished: false}})
     Grid.find().observe(
         changed: =>
           if (Grid.find(error: true).count() + Grid.find(number: "").count()) == 0
-            Game.update @playing_game._id, {$set: {finished: true}}
+            Game.update @current_game._id, {$set: {finished: true}}
+            Meteor.call('set_record')
       )
-    @playing_game.start_at = new Date()
-  ,
-  get_current_game: =>
-    @playing_game if @playing_game? #server_side_current_game
+    @current_game.start_at = new Date()
+  get_current_game_hash: =>
+    @current_game?._id #server_side_current_game
+  get_current_game_start_at: =>
+    @current_game?.start_at
   get_current_time: =>
     new Date()
   set_record: =>
-    if @playing_game?.record?
-      @game_duration = new Date() - new Date(@playing_game.start_at)
-      Game.update(@playing_game?._id,{$set:{record: @game_duration}}) if @game_duration < @playing_game?.record
-    else if @playing_game?
-      @game_duration = new Date() - new Date(@playing_game.start_at)
-      Game.update(@playing_game?._id,{$set:{record: @game_duration}})
+    if @current_game?.record? and @game_duration < @current_game.record
+      @game_duration = new Date() - new Date(@current_game.start_at)
+      record_keepers = Player.find({},{$sort:{scroe:1}}).map((p) -> return p.name)
+      Game.update(@current_game?._id,{$set:{record: @game_duration,record_keepers: "#{record_keepers.join(' ')}(mvp)"}})
+    else if @current_game?
+      @game_duration = new Date() - new Date(@current_game.start_at)
+      record_keepers = Player.find({},{$sort:{scroe:1}}).map((p) -> return p.name)
+      Game.update(@current_game?._id,{$set:{record: @game_duration,record_keepers: "#{record_keepers.join(' ')}(mvp)"}})
   player_online_heartbeat: (player_hash) =>
       @online_players = @online_players.concat(player_hash) if @online_players? and player_hash not in @online_players
 )
@@ -101,16 +105,18 @@ if Meteor.is_client
     @current_player_name = $.cookie('player_name')
 
   Meteor.startup =>
-    Meteor.call 'get_current_game',(error,result) =>
-      @current_game = result
+    Meteor.call 'get_current_game_hash',(error,result) =>
+      @current_game_hash = result
       @duration = 0
       Meteor.setInterval(
         () =>
-          if @current_game?
-            time = (new Date(@server_time) - new Date(@current_game.start_at) + duration)
+          current_game = Game.findOne(@current_game_hash)
+          if current_game?
+            time = (new Date(@server_time) - new Date(@start_at) + duration)
             $("#timer").html format_time(time)
-            $("#record").html "Record=#{format_time(@current_game.record)}" if @current_game.record
-            $("#game_id").html "No.#{@current_game.id}"
+            $("#record").html "Record=#{format_time(current_game.record)}" if current_game.record?
+            $("#record").attr('title',"Record Keepers: #{current_game.record_keepers}") if current_game.record_keepers?
+            $("#game_id").html " [No.#{current_game.id}]"
           if @current_player_hash and Player.findOne @current_player_hash
             if Meteor.status().connected
               Meteor.call('player_online_heartbeat',@current_player_hash, (error,result) -> {})
@@ -124,10 +130,15 @@ if Meteor.is_client
     Meteor.call 'get_current_time',(error,result) =>
       @server_time = result
       @duration = 0
-    @current_game?._id
+    @current_game_hash
+
+  Template.status.start_at = =>
+    Meteor.call 'get_current_game_start_at',(error,result) =>
+      @start_at = result
+    @current_game_hash
 
   Template.status.is_finish = ->
-    if @current_game?.finished
+    if Game.findOne(@current_game_hash)?.finished
       $('#timer').attr('id','stoped_timer')
       true
     else
@@ -170,8 +181,8 @@ if Meteor.is_client
   Template.dashboard.player_name = -> if current_player_name? then current_player_name else ''
   
   Template.dashboard.load_game_hash = =>
-    Meteor.call 'get_current_game',(error,result) =>
-      @current_game = result
+    Meteor.call 'get_current_game_hash',(error,result) =>
+      @current_game_hash = result
       @duration = 0
 
   Template.sudoku.grids = -> Grid.find {}
