@@ -27,6 +27,8 @@
     {{>status}}
     <span id="timer">　
     </span>
+    <span id="game_id">　
+    </span>
     <span id="record">　
     </span>
   </div>
@@ -36,12 +38,8 @@
     <div class="hidden">
       {{#if has_players }}
         {{server_time}}
-        {{start_at_time}}
-        {{record}}
       {{else}}
         {{server_time}}
-        {{start_at_time}}
-        {{record}}
       {{/if}}
     </div>
     {{#if is_finish}}
