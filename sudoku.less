@@ -173,7 +173,7 @@ input#name, input#content {
     position: absolute;
     margin-left: -15px;
     white-space: nowrap;
-    width: 15px;
+    width: 12px;
   }
   .player.offline {opacity: 0.2}
   .player.offline .current_player_marker {
@@ -181,6 +181,7 @@ input#name, input#content {
     -webkit-marquee-direction: forwards;
     -webkit-marquee-speed: slow;
     -webkit-marquee-style: alternate;
+    -moz-binding:url("chrome://xbl-marquee/content/xbl-marquee.xml#marquee- horizontal")
   }
 }
 

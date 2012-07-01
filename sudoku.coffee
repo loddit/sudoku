@@ -235,24 +235,20 @@ if Meteor.is_client
           score: score
 
     click: (event) =>
-      grid = $(event.target)
+      target = $(event.target)
       if not Player.findOne(@current_player_hash)
         alert "Join game first :)"
-        grid.blur()
+        target .blur()
         event.preventDefault()
         $("#name").focus()
       else
-        grid_error = Grid.findOne(
-          row: parseInt(grid.attr("data-row"))
-          col: parseInt(grid.attr("data-col"))
-        ).error
-        grid_player = Grid.findOne(
-          row: parseInt(grid.attr("data-row"))
-          col: parseInt(grid.attr("data-col"))
-        ).player
-        if grid_player isnt current_player_hash and grid_player isnt "system" and !grid_error
+        grid = Grid.findOne(
+          row: parseInt(target.attr("data-row"))
+          col: parseInt(target.attr("data-col"))
+        )
+        if grid.player isnt current_player_hash and grid.player isnt "system" and !grid.error and Player.findOne(grid.player).online
           alert "This grid is holded by other player :("
-          grid.blur()
+          target.blur()
           event.preventDefault()
 
   Template.rank.players = ->
