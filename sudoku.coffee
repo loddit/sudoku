@@ -24,10 +24,10 @@ Meteor.methods(
     Grid.remove {}
     Player.remove {}
     Message.remove {}
-    if Game.find({}).count() == 0
+    game_count = Game.find({}).count()
+    if game_count == 0
       Meteor.call("import_puzzles")
-    games = Game.find({}).fetch()
-    @playing_game = games[Math.floor(Math.random() * games.length)]
+    @playing_game = Game.findOne({id: Math.floor(Math.random() * game_count)})
     @online_players  = []
     _.each @playing_game.puzzle, (item, row) =>
       col = 0
