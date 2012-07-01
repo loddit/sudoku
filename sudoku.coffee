@@ -46,7 +46,6 @@ Meteor.methods(
           player: "system"
           error: false
           color: "black"
-        , =>
         col++
     Game.update(@current_game._id, {$set: {finished: false}})
     Grid.find().observe(
@@ -264,21 +263,25 @@ if Meteor.is_client
 
   Template.restart.counter = -> Player.restart_counter()
 
+  Template.restart.restarting = -> Player.restart_counter() >= Player.restart_condition()
+
   Template.restart.disabled = ->
-    if current_player_hash and Player.findOne(current_player_hash).required_restrat
-      "disabled"
+    if current_player_hash and Player.findOne(current_player_hash).required_restrat or !Player.findOne(current_player_hash).online
+      true
     else
-      ''
+      false
 
   Template.restart.events =
     "submit #restart": (event) =>
       event.preventDefault()
       Player.update @current_player_hash,{$set:{required_restrat: true}}, =>
         if Player.restart_counter() >= Player.restart_condition()
-          Meteor.call('start_game')
+          Meteor.setTimeout(
+            -> Meteor.call('start_game')
+          ,5000
+          )
 
-  Template.chatroom.messages = ->
-    Message.find {},{sort: {time: -1}}
+  Template.chatroom.messages = -> Message.find {},{sort: {time: -1}}
 
   Template.say.events = submit: (event) =>
     event.preventDefault()

@@ -154,6 +154,6 @@
 
 <template name="restart">
   <form id="restart">
-    <input type="submit" {{disabled}} value="Restart require {{counter}}/{{condition}}">
+    <input type="submit" class="{{#if restarting}}restarting{{/if}}" {{#if disabled}}disabled{{/if}} value="{{#if restarting}}Restarting... {{else}}Restart require {{/if}} {{counter}}/{{condition}}">
   </form>
 </template>
