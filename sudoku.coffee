@@ -17,15 +17,18 @@ format_time = (time) ->
 
 Meteor.methods(
   import_puzzles: =>
+    game_count = Game.find({}).count()
+    number = 0
     _.each puzzles,(puzzle,index) ->
-      Game.insert {puzzle: puzzle, id: index}
+      Game.insert {puzzle: puzzle, id: game_count + number} unless Game.findOne({puzzle: puzzle})
+      number++
 
   start_game: =>
     Grid.remove {}
     Player.remove {}
     Message.remove {}
     game_count = Game.find({}).count()
-    if game_count == 0
+    if puzzles.length > game_count
       Meteor.call("import_puzzles")
     @playing_game = Game.findOne({id: Math.floor(Math.random() * game_count)})
     @online_players  = []
@@ -265,7 +268,7 @@ if Meteor.is_client
         if Player.restart_counter() >= Player.restart_condition()
           Meteor.setTimeout(
             -> Meteor.call('start_game')
-          ,5000
+          ,4000
           )
 
   Template.chatroom.messages = -> Message.find {},{sort: {time: -1}}

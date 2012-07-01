@@ -25,6 +25,3 @@ Todo list
 6. Save Best record[Done]
 7. Timer system[Done]
 8. Finish notice[Done]
-
-
-
