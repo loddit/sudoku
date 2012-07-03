@@ -15,14 +15,34 @@
     </div>
     <div id="main">
       {{> notification}}
+      {{> rows}}
       {{> sudoku}}
       {{> cols}}
-      {{> rows}}
     </div>
     {{> sidebar}}
     {{> chatroom}}
   </div>
 </body>
+
+<template name="cols">
+  <ul id="cols">
+    {{#each numbers}}
+      {{> position}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="rows">
+  <ul id="rows">
+    {{#each letters}}
+      {{> position}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="position">
+  <li>{{valueOf}}</li>
+</template>
 
 <template name="notification">
   <div id="notification">

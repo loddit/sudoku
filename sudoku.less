@@ -339,6 +339,35 @@ p.message {
   margin: 10px 0 6px;
 }
 
+#rows {
+  position: absolute;
+  margin: 0 0 0 -@grid_length;
+}
+
+#cols {
+  margin: 0;
+  li {
+    display: block;
+    float: left;
+  }
+}
+
+#rows, #cols {
+  padding: 1px;
+  overflow: hidden;
+  li {
+    height: @grid_length;
+    width: @grid_length;
+    line-height: @grid_length;
+    color: #bbb;
+    font-family: serif;
+    font-style: italic;
+    list-style: none;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+  }
+}
 
 @media only screen (min-device-width:1px) and (max-device-width:480px) {
   #wrapper { width: 360px }
