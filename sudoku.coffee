@@ -114,7 +114,7 @@ if Meteor.is_client
           if current_game?
             time = (new Date(@server_time) - new Date(@start_at) + duration)
             $("#timer").html format_time(time)
-            $("#record").html "Record=#{format_time(current_game.record)}" if current_game.record?
+            $("#record").html "/#{format_time(current_game.record)}" if current_game.record?
             $("#record").attr('title',"Record Keepers: #{current_game.record_keepers}") if current_game.record_keepers?
             $("#game_id").html " [No.#{current_game.id}]"
           if @current_player_hash and Player.findOne @current_player_hash

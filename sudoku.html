@@ -16,6 +16,8 @@
     <div id="main">
       {{> notification}}
       {{> sudoku}}
+      {{> cols}}
+      {{> rows}}
     </div>
     {{> sidebar}}
     {{> chatroom}}
@@ -25,12 +27,8 @@
 <template name="notification">
   <div id="notification">
     {{>status}}
-    <span id="timer">　
-    </span>
-    <span id="game_id">　
-    </span>
-    <span id="record">　
-    </span>
+    <span id="timer"></span><span id="record"></span>
+    <span id="game_id"></span>
   </div>
 </template>
 
