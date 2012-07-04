@@ -3,6 +3,16 @@
 @odd_block_color: #e9e9e9;
 @even_block_color: #fcfcfc;
 @sidebar_width: 150px; 
+.fadein {
+  -webkit-appearance: none;
+  -webkit-animation-name: fadein;  
+  -webkit-animation-iteration-count: 1;  
+  -webkit-animation-duration: 0.4s; 
+  -moz-appearance: none;
+  -moz-animation-name: fadein;  
+  -moz-animation-iteration-count: 1;  
+  -moz-animation-duration: 0.4s; 
+}
 
 body {
   background-image: url('/bright_squares.png');
@@ -58,7 +68,7 @@ h1#logo {
   margin-right: 60px;
 }
 
-#notification {
+#status {
   width: @grid_length * 9;
   padding: 1px;
   height: 22px;
@@ -188,7 +198,6 @@ input#name, input#content {
   td {border: none; padding: none}
   td:first-child {width: 99px;}
   td:last-child {width: 41px;text-align: right;}
-  td.waiting {width: 150px;text-align: left;}
   .current_player_marker {
     position: absolute;
     margin-left: -16px;
@@ -301,12 +310,10 @@ input.grid:disabled {
 
 input.grid.error {background-color: #fcc}
 
-#congratulation {
+#waiting, #congratulation {
   color: #3366cc;
-  -webkit-appearance: none;
-  -webkit-animation-name: fadein;  
-  -webkit-animation-iteration-count: 1;  
-  -webkit-animation-duration: 0.4s; 
+  opacity: 0.6;
+  .fadein
 }
 
 #say{
@@ -318,15 +325,7 @@ p.message {
   margin: 2px 0;
   padding: 2px;
   font-size: 11px;
-  -webkit-appearance: none;
-  -webkit-animation-name: fadein;  
-  -webkit-animation-iteration-count: 1;  
-  -webkit-animation-duration: 0.4s; 
-  -moz-appearance: none;
-  -moz-animation-name: fadein;  
-  -moz-animation-iteration-count: 1;  
-  -moz-animation-duration: 0.4s; 
-
+  .fadein
 }
 
 #chatroom {
@@ -341,11 +340,11 @@ p.message {
 
 #rows {
   position: absolute;
-  margin: 0 0 0 -@grid_length;
+  margin: 0 0 0 (6 - @grid_length);
 }
 
 #cols {
-  margin: 0;
+  margin: -6px 0 0 0 ;
   li {
     display: block;
     float: left;
@@ -359,9 +358,9 @@ p.message {
     height: @grid_length;
     width: @grid_length;
     line-height: @grid_length;
-    color: #bbb;
+    color: #999;
     font-family: serif;
-    font-style: italic;
+    font-size: 12px;
     list-style: none;
     text-align: center;
     padding: 0;

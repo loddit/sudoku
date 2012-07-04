@@ -14,7 +14,7 @@
       <a href="http://meteor.com/" title="Meteor" >Meteor</a>
     </div>
     <div id="main">
-      {{> notification}}
+      {{>status}}
       {{> rows}}
       {{> sudoku}}
       {{> cols}}
@@ -44,30 +44,29 @@
   <li>{{valueOf}}</li>
 </template>
 
-<template name="notification">
-  <div id="notification">
-    {{>status}}
-    <span id="timer"></span><span id="record"></span>
-    <span id="game_id"></span>
-  </div>
-</template>
-
 <template name="status">
-    <div class="hidden">
-      {{#if has_players }}
-        {{server_time}}
-        {{start_at}}
-      {{else}}
-        {{server_time}}
-        {{start_at}}
-      {{/if}}
-    </div>
+  <div id="status">
     {{#if is_finish}}
       <span id="congratulation"> Congratulation!</span>
       <div class="hidden">
         {{record}}
       </div>
     {{/if}}
+    {{#if has_players }}
+      <div class="hidden">
+        {{server_time}}
+        {{start_timer}}
+      </div>
+      <span id="timer"></span><span id="record"></span>
+    {{else}}
+      <div class="hidden">
+        {{load_game_hash}}
+        {{stop_timer}}
+      </div>
+      <span id="waiting">Waiting for players</span>
+    {{/if}}
+    <span id="game_id"></span>
+  </div>
 </template>
 
 <template name="sidebar">
@@ -79,9 +78,6 @@
 
 <template name="dashboard">
   <div id="dashboard">
-    {{#if has_players }}
-      {{load_game_hash}}
-    {{/if}}
     {{#if has_current_player }}
       <div id="tips">
         <p><b>Game Started !</b></p>
@@ -120,25 +116,21 @@
 </template>
 
 <template name="rank">
-  <table id="rank">
-    <thead>
-      {{#if players}}
+  {{#if players}}
+    <table id="rank">
+      <thead>
         <tr>
           <td>Player</td>
           <td>Score</td>
         </tr>
-      {{else}}
-        <tr>
-          <td class="waiting">Waiting for players</td>
-        </tr>
-      {{/if}}
-    </thead>
-    <tbody>
-      {{#each players}}
-        {{> player}}
-      {{/each}}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {{#each players}}
+          {{> player}}
+        {{/each}}
+      </tbody>
+    </table>
+  {{/if}}
 </template>
 
 <template name="player">
