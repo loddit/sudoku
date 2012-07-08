@@ -23,7 +23,7 @@ body {
 
 #dashboard {
   float: left;
-  width: 150px;
+  width: @sidebar_width;
 }
 
 #separater {
@@ -35,15 +35,6 @@ body {
 #join {
   padding: 10px 0;
   text-align: right;
-}
-
-#tips { 
-  p {
-    font-family: Helvetica Neue, Helvetica, Arial;
-    font-size: 11px;
-    color: #666;
-    margin: 6px 0 4px;
-  }
 }
 
 h1#logo {
@@ -120,6 +111,7 @@ input#name, input#content {
   box-sizing:border-box;
   -webkit-box-sizing:border-box;
   -moz-box-sizing:border-box;
+  margin-bottom: 12px;
 }
 
 #name {width: @sidebar_width;}
@@ -132,7 +124,7 @@ input#name, input#content {
   font-size: 13px;
   font-weight: bold;
   border: 1px solid #aa0000;
-  margin: 6px 0;
+  margin-bottom: 12px;
   text-decoration: none;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -151,11 +143,12 @@ input#name, input#content {
   .radius_button;
   width: @sidebar_width;
 }
-#join #how { 
-  text-decoration: none; 
-  color: #999;
+
+#info { 
   font-family: Helvetica Neue, Helvetica, Arial;
   font-size: 12px;
+  color: #999;
+  a {text-decoration: none; color: #999}
 }
 
 #restart input[type="submit"] {
@@ -201,9 +194,9 @@ input#name, input#content {
   td:last-child {width: 42px;text-align: right;}
   .current_player_marker {
     position: absolute;
-    margin-left: -16px;
+    margin-left: -12px;
     white-space: nowrap;
-    width: 14px;
+    width: 10px;
   }
   .player.offline {opacity: 0.2}
   .player.offline .current_player_marker {
@@ -312,8 +305,7 @@ input.grid:disabled {
 input.grid.error {background-color: #fcc}
 
 #waiting, #congratulation {
-  color: #3366cc;
-  opacity: 0.6;
+  color: #666666;
   .fadein
 }
 

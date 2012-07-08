@@ -70,6 +70,8 @@ if Meteor.is_client
               Player.update( @current_player_hash, {$set: {online: false}})
         ,
         1000)
+  
+  Template.game.ready = -> true if Grid.find().count() == 81
 
   Template.status.server_time = =>
     Meteor.call 'get_current_time',(error,result) =>
@@ -96,9 +98,22 @@ if Meteor.is_client
       @current_game_hash = result
       @duration = 0
 
+  Template.status.has_players = -> Player.find().count() > 0
+
   Template.status.slogan = ->
     slogans = ['Go!Go!Go!','Don`t panic!','Have fun~','Smile','Blod as love','Six Six Six','Stay hungry, Stay foolish']
     slogans[Math.floor(Math.random() * slogans.length)]
+
+  Template.dashboard.player_name = -> if current_player_name? then current_player_name else ''
+
+  Template.dashboard.condition = -> Player.restart_condition()
+
+  Template.dashboard.counter = -> Player.restart_counter()
+
+  Template.dashboard.restarting = -> Player.restart_counter() >= Player.restart_condition()
+
+  Template.dashboard.disabled = ->
+    current_player_hash and Player.findOne(current_player_hash).required_restrat or !Player.findOne(current_player_hash).online
 
   Template.dashboard.events =
     "submit #join": (event) =>
@@ -122,13 +137,20 @@ if Meteor.is_client
           $.cookie('player_hash',@current_player_hash)
           $.cookie('player_name', name)
         )
-        $(event.target).html('')
-        $(event.target).replaceWith Meteor.ui.render(Template.dashboard)
+        $(event.target).parent().replaceWith Meteor.ui.render(Template.dashboard)
         $("#say").replaceWith Meteor.ui.render(Template.say)
         Player.find().observe(
           added: (player,index) ->
             Meteor.call('start_timer') if Player.find().count()
         )
+    "submit #restart": (event) =>
+      event.preventDefault()
+      Player.update @current_player_hash,{$set:{required_restrat: true}}, =>
+        if Player.restart_counter() >= Player.restart_condition()
+          Meteor.setTimeout(
+            -> Meteor.call('init')
+          ,4000
+          )
 
   Template.say.has_current_player = Template.dashboard.has_current_player = ->
     if current_player_hash? and Player.findOne(current_player_hash)
@@ -136,10 +158,6 @@ if Meteor.is_client
     else
       false
 
-  Template.dashboard.has_players = Template.status.has_players = -> Player.find().count() > 0
-
-  Template.dashboard.player_name = -> if current_player_name? then current_player_name else ''
-  
   Template.sudoku.grids = -> Grid.find {}
 
   Template.grid.is_error = -> @error is true
@@ -214,28 +232,6 @@ if Meteor.is_client
           event.preventDefault()
 
   Template.rank.players = -> if Player.find().count() > 0 then Player.find {} else false
-
-  Template.restart.condition = -> Player.restart_condition()
-
-  Template.restart.counter = -> Player.restart_counter()
-
-  Template.restart.restarting = -> Player.restart_counter() >= Player.restart_condition()
-
-  Template.restart.disabled = ->
-    if current_player_hash and Player.findOne(current_player_hash).required_restrat or !Player.findOne(current_player_hash).online
-      true
-    else
-      false
-
-  Template.restart.events =
-    "submit #restart": (event) =>
-      event.preventDefault()
-      Player.update @current_player_hash,{$set:{required_restrat: true}}, =>
-        if Player.restart_counter() >= Player.restart_condition()
-          Meteor.setTimeout(
-            -> Meteor.call('init')
-          ,4000
-          )
 
   Template.chatroom.messages = -> Message.find {},{sort: {time: -1}}
 
