@@ -96,6 +96,10 @@ if Meteor.is_client
       @current_game_hash = result
       @duration = 0
 
+  Template.status.slogan = ->
+    slogans = ['Go!Go!Go!','Don`t panic!','Have fun~','Smile','Blod as love','Six Six Six','Stay hungry, Stay foolish']
+    slogans[Math.floor(Math.random() * slogans.length)]
+
   Template.dashboard.events =
     "submit #join": (event) =>
       event.preventDefault()
