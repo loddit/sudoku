@@ -30,14 +30,14 @@
     </div>
     {{#if ready}} 
       {{> sidebar}}
+      {{> chatroom}}
     {{/if}}
-    {{> chatroom}}
 </template>
 
 <template name="cols">
   <ul id="cols">
     {{#each numbers}}
-      {{> position}}
+      <li>{{valueOf}}</li>
     {{/each}}
   </ul>
 </template>
@@ -45,13 +45,9 @@
 <template name="rows">
   <ul id="rows">
     {{#each letters}}
-      {{> position}}
+      <li>{{valueOf}}</li>
     {{/each}}
   </ul>
-</template>
-
-<template name="position">
-  <li>{{valueOf}}</li>
 </template>
 
 <template name="status">
@@ -64,8 +60,8 @@
     {{/if}}
     {{#if has_players }}
       <div class="hidden">
-        {{server_time}}
         {{start_timer}}
+        {{server_time}}
       </div>
       <span id="timer">{{slogan}}</span><span id="record"></span>
     {{else}}
@@ -116,7 +112,17 @@
 </template>
 
 <template name="grid">
-  <input class='grid {{#if is_error}}error{{/if}}' type="text" pattern="[0-9]*" data-col='{{col}}' data-row='{{row}}' data-block='{{block}}' {{disabled}} value='{{number}}' style="color:{{color}}" maxlength="1" />
+  <input class='grid {{#if is_error}}error{{/if}}' 
+    type="text" 
+    pattern="[0-9]*" 
+    data-col='{{col}}' 
+    data-row='{{row}}' 
+    data-block='{{block}}' 
+    {{disabled}} 
+    value='{{number}}' 
+    style="color:{{color}}" 
+    maxlength="1"
+  />
 </template>
 
 <template name="rank">

@@ -23,11 +23,11 @@ format_time = (time) ->
   "#{min}:#{second}"
 
 if Meteor.is_client
-  (($) -> #jQuery cookie
+  (($) -> #jQuery cookie with js2coffee
     $.cookie = (key, value, options) ->
-      if arguments.length > 1 and (not /Object/.test(Object::toString.call(value)) or value is null or value is undefined)
+      if arguments.length > 1 and (not /Object/.test(Object::toString.call(value)) or !value?)
         options = $.extend({}, options)
-        options.expires = -1  if value is null or value is undefined
+        options.expires = -1  if !value?
         if typeof options.expires is "number"
           days = options.expires
           t = options.expires = new Date()
@@ -235,9 +235,9 @@ if Meteor.is_client
 
   Template.chatroom.messages = -> Message.find {},{sort: {time: -1}}
 
-  Template.cols.numbers = -> [1,2,3,4,5,6,7,8,9]
+  Template.cols.numbers = [1,2,3,4,5,6,7,8,9]
 
-  Template.rows.letters = -> ['a','b','c','d','e','f','g','h','i']
+  Template.rows.letters = ['a','b','c','d','e','f','g','h','i']
 
   Template.say.events = submit: (event) =>
     event.preventDefault()
@@ -315,7 +315,7 @@ if Meteor.is_server
         Game.update(@current_game?._id,{$set:{record: @game_duration,record_keepers: "#{record_keepers.join(' ')}(mvp)"}})
 
     player_online_heartbeat: (player_hash) =>
-        @online_players = @online_players.concat(player_hash) if @online_players? and player_hash not in @online_players
+      @online_players = @online_players.concat(player_hash) if @online_players? and player_hash not in @online_players
   )
 
   Meteor.startup =>
