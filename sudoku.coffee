@@ -137,8 +137,8 @@ if Meteor.is_client
           $.cookie('player_hash',@current_player_hash)
           $.cookie('player_name', name)
         )
-        $(event.target).parent().replaceWith Meteor.ui.render(Template.dashboard)
-        $("#say").replaceWith Meteor.ui.render(Template.say)
+        $(event.target).parent().replaceWith Meteor.render(Template.dashboard)
+        $("#say").replaceWith Meteor.render(Template.say)
         Player.find().observe(
           added: (player,index) ->
             Meteor.call('start_timer') if Player.find().count()
@@ -248,7 +248,7 @@ if Meteor.is_client
         content: say.find("input#content").val()
         player: current_player
         time: new Date()
-      $(event.target).replaceWith Meteor.ui.render(Template.say)
+      $(event.target).replaceWith Meteor.render(Template.say)
 
 if Meteor.is_server
   Meteor.methods(
